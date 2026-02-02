@@ -1,10 +1,7 @@
-import vista.vista;
+import controlador.controlador; 
 
-public class main {
-    public static void main(String[] args) {
-        
-        //aqui no iria esto, solo es para testear la vista, pueden borrarlo
-        vista ventana = new vista();
-        ventana.setVisible(true);
+public class Main { 
+    public static void m(String[] args) {
+        new controlador();
     }
 }
