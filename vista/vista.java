@@ -4,14 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
     
-
 public class vista extends JFrame {
 
     public JTextField txtUsuario;
-    public JTextField txtContrasena;
+    public JPasswordField txtContrasena;
     public JButton btnLogin;
 
-    public JLabel lbRegis;
+    public JButton btnRegis;
 
     public vista () {
         setTitle("Comedor UCV");
@@ -39,7 +38,6 @@ public class vista extends JFrame {
 
         Dimension labelSize = new Dimension(100, 30);
         Font fuente = new Font("ARIAL", Font.BOLD, 16);
-
         //subpanel usuario
         JPanel filaUsuario = new JPanel();
         filaUsuario.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -59,7 +57,6 @@ public class vista extends JFrame {
         login.add(filaUsuario);
 
         login.add(Box.createRigidArea(new Dimension(0, 10))); 
-
         //subpanel contrasena
         JPanel filaContrasena = new JPanel();
         filaContrasena.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -87,13 +84,32 @@ public class vista extends JFrame {
 
         login.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        lbRegis = new JLabel("Registrarse");
-        lbRegis.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lbRegis.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        login.add(lbRegis);
+        btnRegis = new JButton("Registrarse");
+        btnRegis.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnRegis.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        login.add(btnRegis);
 
         panelPrincipal.add(login);
         add(panelPrincipal);
+    }
+    
+    public String getUsuario() {
+        return txtUsuario.getText();
+    }
 
-    }   
+    public String getContra() {
+        return new String(txtContrasena.getPassword());
+    }
+
+    public void limpiar() {
+        txtUsuario.setText("");
+        txtContrasena.setText("");
+    }
+
+    public void setControlador(ActionListener a) {
+        btnLogin.addActionListener(a);
+        btnLogin.setActionCommand("login");
+        btnRegis.addActionListener(a);
+        btnRegis.setActionCommand("registrar"); 
+    }
 }
