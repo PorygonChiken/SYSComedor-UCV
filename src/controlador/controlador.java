@@ -3,10 +3,10 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-
 import modelo.modelo;
 import vista.vista;
 import vista.vistaMenuUsuario;
+import controlador.ControladorMenuAdmin;
 
 public class controlador implements ActionListener {
     private vista vista;
@@ -58,15 +58,20 @@ public class controlador implements ActionListener {
         String usuario = vista.getUsuario();
         String cntr = vista.getContra();
         boolean v = this.modelo.verificar(usuario, cntr);
+
         if(v){
-            JOptionPane.showMessageDialog(vista, "Bienvenido " + usuario);
             vista.dispose(); 
-            vistaMenu.setVisible(true); 
+            if(this.modelo.Admin(usuario)){
+                JOptionPane.showMessageDialog(null, "hola admin");
+                new ControladorMenuAdmin();
+            }else{
+                JOptionPane.showMessageDialog(null, "hola" + usuario);
+                vistaMenu.setVisible(true); 
+            }
         }else{
-            JOptionPane.showMessageDialog(vista, "error: usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "datos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     private void Registro(){
         String usuario = vista.getUsuario();
         String cntr = vista.getContra();

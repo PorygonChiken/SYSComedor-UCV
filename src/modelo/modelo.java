@@ -65,4 +65,18 @@ public class modelo{
         
         return false;
     }
+    public boolean Admin(String usuario) {
+        File archivoAdmin = new File("admin.txt"); 
+        try(Scanner scanner = new Scanner(archivoAdmin)) {
+            while(scanner.hasNextLine()) {
+                String linea = scanner.nextLine().trim();
+                if (linea.equals(usuario)) {
+                    return true; 
+                }
+            }
+        }catch(IOException a) {
+            a.printStackTrace();
+        }
+        return false; 
+    }
 }
