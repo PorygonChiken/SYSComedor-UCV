@@ -29,7 +29,7 @@ public class modelo{
         return null; 
     }
     public boolean Admin(String cedula) {
-        File f = new File("admins.txt");
+        File f = new File("admin.txt");
         if(!f.exists()) return false;
         try(Scanner scanner = new Scanner(f)){
             while(scanner.hasNextLine()){
