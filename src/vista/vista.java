@@ -12,6 +12,7 @@ public class vista extends JFrame {
     public JButton btnRegis;
 
     public vista() {
+        menuUtils utils = new menuUtils();
         setTitle("Comedor UCV");
         setSize(1200, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,51 +42,32 @@ public class vista extends JFrame {
         txtUsuario = new JTextField(20);
         txtContrasena = new JPasswordField(20);
 
-        login.add(crearFila("Usuario: ", txtUsuario));
+        login.add(Box.createRigidArea(espacio10));
+
+        login.add(utils.crearFila("Usuario: ", txtUsuario));
         login.add(Box.createRigidArea(espacio10));
         
-        login.add(crearFila("Contraseña: ", txtContrasena));
+        login.add(utils.crearFila("Contraseña: ", txtContrasena));
         login.add(Box.createRigidArea(espacio30));
 
-        btnLogin = crearBoton("Iniciar sesión");
+        btnLogin = utils.crearBoton("Iniciar sesión");
         login.add(btnLogin);
 
         login.add(Box.createRigidArea(espacio10));
 
-        btnRegis = crearBoton("Registrarse");
+        btnRegis = utils.crearBoton("Registrarse");
+        btnRegis.setFont(new Font("ARIAL", Font.PLAIN, 12));
+        btnRegis.setBorderPainted(false);
+        btnRegis.setContentAreaFilled(false);
+        btnRegis.setForeground(Color.BLUE);
+        btnRegis.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnRegis.setFocusPainted(false);
         login.add(btnRegis);
 
         login.add(Box.createRigidArea(espacio30));
 
         panelPrincipal.add(login);
         add(panelPrincipal);
-    }
-
-    private JPanel crearFila(String textoLabel, JTextField campo) {
-        JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        fila.setBackground(Color.WHITE);
-        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-
-        JLabel label = new JLabel(textoLabel);
-        label.setPreferredSize(new Dimension(100, 30));
-        label.setFont(new Font("ARIAL", Font.BOLD, 16));
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-
-        campo.setPreferredSize(new Dimension(200, 30));
-
-        fila.add(label);
-        fila.add(campo);
-
-        return fila;
-    }
-
-    private JButton crearBoton(String texto) {
-        JButton boton = new JButton(texto);
-        boton.setFont(new Font("ARIAL", Font.BOLD, 16));
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        boton.setFocusPainted(false);
-        return boton;
     }
 
     public String getUsuario() {

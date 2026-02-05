@@ -35,8 +35,8 @@ public class controlador implements ActionListener{
                 login();
                 break;
             case "registrar":
-                vista.setVisible(false);
                 vistaRegi.setVisible(true);
+                vista.setVisible(false);
                 break;
             case "guardar_registro":
                 guardarNuevoUsuario();
@@ -66,14 +66,15 @@ public class controlador implements ActionListener{
         String cntr = vista.getContra();
         boolean datos = this.modelo.verificar(usuario, cntr);
         if(datos){
-            vista.dispose();
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
             if(cedula != null && this.modelo.Admin(cedula)){
                 JOptionPane.showMessageDialog(null, "hola admin");
                 new ControladorMenuAdmin();
+                vista.dispose();
             }else{
                 JOptionPane.showMessageDialog(null, "hola usuario: " + usuario);
-                vistaMenu.setVisible(true); 
+                vistaMenu.setVisible(true);
+                vista.dispose();
             }
         }else{
             JOptionPane.showMessageDialog(vista, "usuario o contraseña incorrectos", "error", JOptionPane.ERROR_MESSAGE);
