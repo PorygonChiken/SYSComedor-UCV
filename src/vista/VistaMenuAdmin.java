@@ -1,188 +1,131 @@
 package vista;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class VistaMenuAdmin extends JFrame {
-    
-    // Componentes del Menú
-    private CampoTextoRedondo txtFecha, txtTipoPlato, txtCantidad;
-    // Componentes de Costos (Nuevos)
-    private CampoTextoRedondo txtCostoFijo, txtCostoVariable, txtMerma;
-    
-    private JTextArea areaReporte;
-    private BotonRedondo btnGuardar, btnVerMenus, btnSalir;
 
-    // Colores
-    private final Color COLOR_FONDO = Color.WHITE;
-    private final Color COLOR_BOTON = Color.BLACK;
-    private final Color COLOR_TEXTO_BOTON = Color.WHITE;
-    private final Color COLOR_BORDE = new Color(200, 200, 200);
+    // Campos de texto (Inputs)
+    private JTextField txtFecha, txtPlato, txtRaciones;
+    private JTextField txtCostoFijo, txtCostoVariable, txtMerma;
+    private JTextArea areaReporte; // Lo dejo oculto o pequeño por simplicidad
+    
+    // Botones
+    private JButton btnGuardar, btnVer, btnSalir;
 
     public VistaMenuAdmin() {
-        setTitle("App Comedor - Cálculo CCB");
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        setResizable(true);
-        setMinimumSize(new Dimension(800, 600));
+        setTitle("Administrador - Comedor");
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Pantalla completa
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(COLOR_FONDO);
-        mainPanel.setBorder(new EmptyBorder(30, 30, 30, 30)); 
+        // 1. FONDO AZUL (Panel Principal)
+        // Usamos GridBagLayout para centrar la caja blanca automáticamente
+        JPanel panelFondo = new JPanel(new GridBagLayout());
+        panelFondo.setBackground(new Color(176, 224, 230)); // Azul clarito (PowderBlue)
 
-        // --- ENCABEZADO ---
-        JLabel titleLabel = new JLabel("Planificación y Costos");
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // 2. CAJA BLANCA CENTRAL
+        JPanel panelCaja = new JPanel();
+        panelCaja.setLayout(new BoxLayout(panelCaja, BoxLayout.Y_AXIS));
+        panelCaja.setBackground(Color.WHITE);
+        // Borde Negro de 2 pixeles
+        panelCaja.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.BLACK, 2),
+                BorderFactory.createEmptyBorder(20, 40, 20, 40) // Margen interno
+        ));
+
+        // --- CONTENIDO DE LA CAJA ---
+
+        // Título
+        JLabel lblTitulo = new JLabel("Configuración de Menú");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Campos (Creamos una grilla pequeña para que se vea ordenado dentro de la caja)
+        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
+        panelFormulario.setBackground(Color.WHITE);
         
-        // --- LISTA ---
-        areaReporte = new JTextArea(8, 40);
-        areaReporte.setEditable(false);
-        areaReporte.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        areaReporte.setBackground(new Color(250, 250, 250));
+        txtFecha = new JTextField();
+        txtPlato = new JTextField();
+        txtRaciones = new JTextField();
+        txtCostoFijo = new JTextField();
+        txtCostoVariable = new JTextField();
+        txtMerma = new JTextField();
+
+        // Agregamos etiquetas y campos
+        panelFormulario.add(new JLabel("Fecha:"));           panelFormulario.add(txtFecha);
+        panelFormulario.add(new JLabel("Plato Principal:")); panelFormulario.add(txtPlato);
+        panelFormulario.add(new JLabel("N° Raciones:"));     panelFormulario.add(txtRaciones);
+        panelFormulario.add(new JLabel("Costo Fijo:"));      panelFormulario.add(txtCostoFijo);
+        panelFormulario.add(new JLabel("Costo Variable:"));  panelFormulario.add(txtCostoVariable);
+        panelFormulario.add(new JLabel("% Merma (ej: 10):"));panelFormulario.add(txtMerma);
+
+        // Área de reporte pequeña (para ver que guardaste)
+        areaReporte = new JTextArea(3, 20);
+        areaReporte.setVisible(false); // La ocultamos para que se vea limpio como la foto, o true si quieres ver logs
+
+        // Botones estilo "Windows Clásico" o web simple
+        btnGuardar = new JButton("Guardar y Calcular");
+        btnGuardar.setBackground(new Color(240, 240, 240));
         
-        Border dashed = BorderFactory.createDashedBorder(COLOR_BORDE, 2, 5, 3, true);
-        JScrollPane scroll = new JScrollPane(areaReporte);
-        scroll.setBorder(new CompoundBorder(dashed, new EmptyBorder(10,10,10,10)));
-        scroll.getViewport().setBackground(new Color(250, 250, 250));
-        scroll.setAlignmentX(Component.CENTER_ALIGNMENT);
-        scroll.setMaximumSize(new Dimension(800, 200));
-
-        // --- FORMULARIO ---
-        // Usaremos un panel Grid para organizar los inputs en 2 columnas
-        JPanel formGrid = new JPanel(new GridLayout(3, 2, 20, 10)); // 3 filas, 2 columnas
-        formGrid.setBackground(COLOR_FONDO);
-        formGrid.setMaximumSize(new Dimension(800, 180));
-        formGrid.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Columna 1: Datos del Menú
-        txtFecha = new CampoTextoRedondo("Fecha (DD/MM/AAAA)", 350);
-        txtTipoPlato = new CampoTextoRedondo("Tipo de Plato", 350);
-        txtCantidad = new CampoTextoRedondo("Raciones (Bandejas)", 350);
-
-        // Columna 2: Datos Financieros
-        txtCostoFijo = new CampoTextoRedondo("Costo Fijo Total (Bs)", 350);
-        txtCostoVariable = new CampoTextoRedondo("Costo Variable Total (Bs)", 350);
-        txtMerma = new CampoTextoRedondo("Merma (%) Ej: 10", 350);
-
-        // Agregamos en orden de lectura
-        formGrid.add(crearPanelCampo("Fecha:", txtFecha));
-        formGrid.add(crearPanelCampo("Costos Fijos:", txtCostoFijo));
+        btnVer = new JButton("Ver Lista");
         
-        formGrid.add(crearPanelCampo("Plato:", txtTipoPlato));
-        formGrid.add(crearPanelCampo("Costos Variables:", txtCostoVariable));
+        btnSalir = new JButton("Cerrar Sesión");
+        btnSalir.setBackground(new Color(255, 102, 102)); // Rojo suave
+        btnSalir.setForeground(Color.WHITE);
+
+        // Panel de botones para alinearlos
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        panelBotones.setBackground(Color.WHITE);
+        panelBotones.add(btnVer);
+        panelBotones.add(btnSalir);
+
+        // --- ARMAR LA CAJA ---
+        panelCaja.add(lblTitulo);
+        panelCaja.add(Box.createVerticalStrut(20)); // Espacio
+        panelCaja.add(panelFormulario);
+        panelCaja.add(Box.createVerticalStrut(20)); // Espacio
         
-        formGrid.add(crearPanelCampo("Raciones:", txtCantidad));
-        formGrid.add(crearPanelCampo("Porcentaje Merma:", txtMerma));
+        // Botón principal grande
+        btnGuardar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelCaja.add(btnGuardar);
+        panelCaja.add(Box.createVerticalStrut(10));
+        panelCaja.add(panelBotones);
 
-        // --- BOTONES ---
-        btnGuardar = new BotonRedondo("CALCULAR Y GUARDAR", COLOR_BOTON, COLOR_TEXTO_BOTON, 400);
-        
-        JPanel panelSecundario = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        panelSecundario.setBackground(COLOR_FONDO);
-        
-        btnVerMenus = new BotonRedondo("Ver Lista", Color.LIGHT_GRAY, Color.BLACK, 150);
-        btnSalir = new BotonRedondo("Salir", Color.WHITE, Color.RED, 100);
-        btnSalir.setBorder(null);
+        // Agregar la caja al fondo azul
+        panelFondo.add(panelCaja);
 
-        panelSecundario.add(btnVerMenus);
-        panelSecundario.add(btnSalir);
-
-        // --- ARMAR PANTALLA ---
-        mainPanel.add(Box.createVerticalGlue());
-        mainPanel.add(titleLabel);
-        mainPanel.add(Box.createVerticalStrut(20));
-        mainPanel.add(scroll);
-        mainPanel.add(Box.createVerticalStrut(20));
-        mainPanel.add(formGrid); // Insertamos la cuadrícula
-        mainPanel.add(Box.createVerticalStrut(30));
-        mainPanel.add(btnGuardar);
-        mainPanel.add(Box.createVerticalStrut(15));
-        mainPanel.add(panelSecundario);
-        mainPanel.add(Box.createVerticalGlue());
-
-        add(mainPanel);
+        // Agregar el fondo a la ventana
+        add(panelFondo);
     }
 
-    // Helper para empaquetar Label + Input
-    private JPanel crearPanelCampo(String titulo, JComponent campo) {
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.setBackground(Color.WHITE);
-        JLabel l = new JLabel(titulo);
-        l.setFont(new Font("SansSerif", Font.BOLD, 12));
-        l.setAlignmentX(Component.LEFT_ALIGNMENT);
-        campo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        p.add(l);
-        p.add(Box.createVerticalStrut(5));
-        p.add(campo);
-        return p;
-    }
-
-    // --- GETTERS ---
+    // --- GETTERS (Necesarios para que el Controlador funcione) ---
     public String getFecha() { return txtFecha.getText(); }
-    public String getTipoPlato() { return txtTipoPlato.getText(); }
-    public String getCantidad() { return txtCantidad.getText(); }
-    // Nuevos Getters
+    public String getTipoPlato() { return txtPlato.getText(); }
+    public String getCantidad() { return txtRaciones.getText(); }
     public String getCostoFijo() { return txtCostoFijo.getText(); }
     public String getCostoVariable() { return txtCostoVariable.getText(); }
     public String getMerma() { return txtMerma.getText(); }
 
-    public void setAreaReporte(String texto) { areaReporte.setText(texto); }
-    
+    public void setAreaReporte(String texto) { 
+        // Opcional: Si quieres mostrar mensajes emergentes en lugar de texto
+        JOptionPane.showMessageDialog(this, texto);
+    }
+
     public void limpiarCampos() {
-        txtFecha.setText(""); txtTipoPlato.setText(""); txtCantidad.setText("");
+        txtFecha.setText(""); txtPlato.setText(""); txtRaciones.setText("");
         txtCostoFijo.setText(""); txtCostoVariable.setText(""); txtMerma.setText("");
     }
 
+    // --- CONEXIÓN CON CONTROLADOR ---
     public void setControlador(ActionListener c) {
         btnGuardar.addActionListener(c);
         btnGuardar.setActionCommand("GUARDAR");
-        btnVerMenus.addActionListener(c);
-        btnVerMenus.setActionCommand("VER");
+        
+        btnVer.addActionListener(c);
+        btnVer.setActionCommand("VER");
+        
         btnSalir.addActionListener(c);
         btnSalir.setActionCommand("SALIR");
-    }
-
-    // Clases internas de diseño (Igual que antes)
-    class BotonRedondo extends JButton {
-        private Color colorFondo, colorTexto;
-        public BotonRedondo(String texto, Color fondo, Color textoColor, int ancho) {
-            super(texto);
-            this.colorFondo = fondo; this.colorTexto = textoColor;
-            setContentAreaFilled(false); setFocusPainted(false); setBorderPainted(false);
-            setForeground(textoColor); setFont(new Font("SansSerif", Font.BOLD, 14));
-            setAlignmentX(Component.CENTER_ALIGNMENT);
-            setMaximumSize(new Dimension(ancho, 45)); setPreferredSize(new Dimension(ancho, 45));
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
-        }
-        @Override protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(new Color(220,220,220)); g2.fillRoundRect(2, 2, getWidth()-2, getHeight()-2, 20, 20);
-            g2.setColor(colorFondo); g2.fillRoundRect(0, 0, getWidth()-3, getHeight()-3, 20, 20);
-            g2.dispose(); super.paintComponent(g);
-        }
-    }
-    class CampoTextoRedondo extends JTextField {
-        public CampoTextoRedondo(String ph, int ancho) {
-            setOpaque(false); setBorder(new EmptyBorder(5, 15, 5, 15));
-            setFont(new Font("SansSerif", Font.PLAIN, 14));
-            setAlignmentX(Component.CENTER_ALIGNMENT);
-            setMaximumSize(new Dimension(ancho, 40)); setPreferredSize(new Dimension(ancho, 40));
-        }
-        @Override protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(Color.WHITE); g2.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-            g2.setColor(new Color(200, 200, 200)); g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
-            g2.dispose(); super.paintComponent(g);
-        }
     }
 }
