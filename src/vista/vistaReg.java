@@ -3,7 +3,6 @@ package vista;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-//import vista.menuUtils;
 
 public class vistaReg extends JFrame {
 
@@ -11,12 +10,13 @@ public class vistaReg extends JFrame {
     public JPasswordField txtNuevaContrasena;
     public JTextField txtCedula;
     public JButton btnRegistrar;
+    public JButton btnVolver;
 
     public vistaReg() {
         menuUtils utils = new menuUtils();
         setTitle("Registro Comedor UCV");
         setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel panelPrincipal = new JPanel(new GridBagLayout());
@@ -26,9 +26,10 @@ public class vistaReg extends JFrame {
         registro.setLayout(new BoxLayout(registro, BoxLayout.Y_AXIS));
         registro.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         registro.setBackground(Color.WHITE);
-        registro.setPreferredSize(new Dimension(500, 280));
+        registro.setPreferredSize(new Dimension(500, 320));
 
         Dimension espacio10 = new Dimension(0, 10);
+        Dimension espacio20 = new Dimension(0, 20);
         Dimension espacio30 = new Dimension(0,30);
 
         registro.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -56,8 +57,12 @@ public class vistaReg extends JFrame {
         btnRegistrar = utils.crearBoton("Registrar");
         registro.add(btnRegistrar);
 
-        registro.add(Box.createRigidArea(espacio30));
-
+        registro.add(Box.createRigidArea(new Dimension(0, 10)));
+        btnVolver = utils.crearBoton("Volver"); 
+        btnVolver.setBackground(new Color(255, 100, 100)); 
+        btnVolver.setForeground(Color.WHITE);
+        registro.add(btnVolver);
+        registro.add(Box.createRigidArea(espacio20));
         panelPrincipal.add(registro);
         add(panelPrincipal);
     }
@@ -74,5 +79,7 @@ public class vistaReg extends JFrame {
     public void setControlador(ActionListener ac){
         btnRegistrar.addActionListener(ac);
         btnRegistrar.setActionCommand("guardar_registro");
+        btnVolver.addActionListener(ac);
+        btnVolver.setActionCommand("volver");
     }
 }

@@ -41,6 +41,11 @@ public class controlador implements ActionListener{
             case "guardar_registro":
                 guardarNuevoUsuario();
                 break;
+            case "volver":
+                vista.setVisible(true); 
+                vistaRegi.limpiar();
+                vistaRegi.setVisible(false);
+                break;
             case "salir":
                 System.exit(0);
                 break;
