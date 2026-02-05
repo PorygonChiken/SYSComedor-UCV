@@ -1,6 +1,7 @@
 import controlador.ControladorMenuAdmin;
 import controlador.controlador; 
 import vista.vistaMenuUsuario;
+import vista.vistaReg;
 
 
 public class Main { 
@@ -8,6 +9,8 @@ public class Main {
         //new ControladorMenuAdmin();
         //vistaMenuUsuario menu = new vistaMenuUsuario();
         //menu.setVisible(true);
+        //vistaReg registro = new vistaReg();
+        //registro.setVisible(true);
         new controlador();
     }
 }
