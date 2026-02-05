@@ -25,14 +25,29 @@ public class modelo{
             return false;
         }
 
-        try{
+        File archivoo = new File(archivo);
+        if (archivoo.exists()) {
+            try (Scanner scanner = new Scanner(archivoo)) {
+                while (scanner.hasNextLine()) {
+                    String linea = scanner.nextLine();
+                    String[] partes = linea.split(";");
+                    if (partes.length >= 1 && partes[0].equals(usuario)) {
+                        return false;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        try {
             FileWriter escribir = new FileWriter(archivo, true);
             String linea = usuario + ";" + contra;
             escribir.write(linea + "\n");
             escribir.close();
             return true;
-
-        }catch (IOException a){
+        } catch (IOException a) {
             a.printStackTrace();
             return false;
         }

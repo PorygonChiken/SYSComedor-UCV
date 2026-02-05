@@ -41,7 +41,7 @@ public class controlador implements ActionListener {
                 cerrarSesion(); 
                 break;
             case "ver_menu":
-                String menudia = "menu de hoy\n\n"+
+                String menudia = "Menú de hoy\n\n"+
                 "Sopa: Crema de Zanahoria\n"+
                 "Comida: Pollo con arroz y tajadas\n"+
                 "Jugo: Jugo de naranja\n"+
@@ -49,7 +49,7 @@ public class controlador implements ActionListener {
                 JOptionPane.showMessageDialog(vistaMenu, menudia, "Menú del Comedor", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case "ver_saldo":
-                JOptionPane.showMessageDialog(vistaMenu, "saldo actual: 1,000 bs", "mi Monedero", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(vistaMenu, "Saldo actual: 1,000 bs", "Mi Monedero", JOptionPane.INFORMATION_MESSAGE);
                 break;
         }
     }
@@ -62,29 +62,29 @@ public class controlador implements ActionListener {
         if(v){
             vista.dispose(); 
             if(this.modelo.Admin(usuario)){
-                JOptionPane.showMessageDialog(null, "hola admin");
+                JOptionPane.showMessageDialog(null, "Hola admin " + usuario);
                 new ControladorMenuAdmin();
             }else{
-                JOptionPane.showMessageDialog(null, "hola" + usuario);
+                JOptionPane.showMessageDialog(null, "Hola " + usuario);
                 vistaMenu.setVisible(true); 
             }
         }else{
-            JOptionPane.showMessageDialog(vista, "datos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "Datos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     private void Registro(){
         String usuario = vista.getUsuario();
         String cntr = vista.getContra();
         if(usuario.isEmpty() || cntr.isEmpty()){
-            JOptionPane.showMessageDialog(vista, "se tiene que llenar todos los datos para registrarse");
+            JOptionPane.showMessageDialog(vista, "Debe completar todos los campos para poder registrarse");
             return;
         }
         boolean guardado = this.modelo.registrarUsuario(usuario, cntr);
         if (guardado) {
-            JOptionPane.showMessageDialog(vista, "usuario registrado");
+            JOptionPane.showMessageDialog(vista, "Usuario registrado");
             vista.limpiar();
         } else {
-            JOptionPane.showMessageDialog(vista, "error al registrarse", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "Error al registrarse", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 

@@ -33,7 +33,8 @@ public class ControladorMenuAdmin implements ActionListener {
                 mostrarMenus();
                 break;
             case "SALIR":
-                System.exit(0);
+                cerrarSesion();
+                new controlador();
                 break;
         }
     }
@@ -88,5 +89,10 @@ public class ControladorMenuAdmin implements ActionListener {
     private void mostrarMenus() {
         String listado = modelo.leerMenus();
         vista.setAreaReporte(listado);
+    }
+
+    private void cerrarSesion() {
+        vista.setVisible(false);
+        vista.dispose();
     }
 }
