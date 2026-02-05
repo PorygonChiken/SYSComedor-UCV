@@ -14,7 +14,7 @@ public class vistaReg extends JFrame {
     public vistaReg() {
         setTitle("Registro Comedor UCV");
         setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel panelPrincipal = new JPanel(new GridBagLayout());
@@ -85,5 +85,19 @@ public class vistaReg extends JFrame {
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         boton.setFocusPainted(false);
         return boton;
+    }
+
+    public String getUsuario() { return txtNuevoUsuario.getText(); }
+    public String getCedula() { return txtCedula.getText(); }
+    public String getContra() { return new String(txtNuevaContrasena.getPassword()); }
+    
+    public void limpiar(){
+        txtNuevoUsuario.setText("");
+        txtCedula.setText("");
+        txtNuevaContrasena.setText("");
+    }
+    public void setControlador(ActionListener ac){
+        btnRegistrar.addActionListener(ac);
+        btnRegistrar.setActionCommand("guardar_registro");
     }
 }

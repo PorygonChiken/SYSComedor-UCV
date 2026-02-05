@@ -7,91 +7,68 @@ import java.util.Scanner;
 
 public class modelo{
     private String archivo;
-
     public modelo(){
         this.archivo = "usuarios.txt";
     }
-
-    private boolean datosValidos(String usuario, String contra){
-        if(usuario == null || usuario.trim().isEmpty() || 
-            contra == null || contra.trim().isEmpty()){
-            return false;
-        }
-        return true;
-    }
-
-    public boolean registrarUsuario(String usuario, String contra){
-        if(!datosValidos(usuario, contra)) {
-            return false;
-        }
-
-        File archivoo = new File(archivo);
-        if (archivoo.exists()) {
-            try (Scanner scanner = new Scanner(archivoo)) {
-                while (scanner.hasNextLine()) {
-                    String linea = scanner.nextLine();
-                    String[] partes = linea.split(";");
-                    if (partes.length >= 1 && partes[0].equals(usuario)) {
-                        return false;
+    public String obtenerCedulaPorUsuario(String usuario){
+        File f = new File(archivo);
+        if (!f.exists()) return null;
+        try(Scanner scanner = new Scanner(f)){
+            while(scanner.hasNextLine()){
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                if(partes.length >= 3){
+                    if(partes[0].equals(usuario)) {
+                        return partes[1]; 
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
             }
+        }catch(IOException a){
+            a.printStackTrace();
         }
-
-        try {
+        return null; 
+    }
+    public boolean Admin(String cedula) {
+        File f = new File("admins.txt");
+        if(!f.exists()) return false;
+        try(Scanner scanner = new Scanner(f)){
+            while(scanner.hasNextLine()){
+                if(scanner.nextLine().trim().equals(cedula)){
+                    return true;
+                }
+            }
+        } catch(IOException a) {
+            a.printStackTrace();
+        }
+        return false;
+    }
+    public boolean registrarUsuario(String usuario, String cedula, String contra) {
+        try{
             FileWriter escribir = new FileWriter(archivo, true);
-            String linea = usuario + ";" + contra;
-            escribir.write(linea + "\n");
+            escribir.write(usuario + ";" + cedula + ";" + contra + "\n");
             escribir.close();
             return true;
-        } catch (IOException a) {
+        }catch (IOException a) {
             a.printStackTrace();
             return false;
         }
     }
 
-    public boolean verificar(String usuario, String contra){
-        if (usuario.equals("mauricio") && contra.equals("123456")){
-            return true;
-        }
-        File archivoo = new File(archivo);
-        if (!archivoo.exists()){
-            return false;
-        }
-        try (Scanner scanner = new Scanner(archivoo)){
+    public boolean verificar(String usuario, String contra) {
+        File f = new File(archivo);
+        if(!f.exists()) return false;
+        try(Scanner scanner = new Scanner(f)) {
             while (scanner.hasNextLine()) {
-                String linea = scanner.nextLine();
-
-                String[] partes = linea.split(";"); 
-
-            
-                if (partes.length >= 2){
-                    if (partes[0].equals(usuario) && partes[1].equals(contra)){
+                String[] partes = scanner.nextLine().split(";");
+                if (partes.length >= 3) {
+                    if(partes[0].equals(usuario) && partes[2].equals(contra)) {
                         return true;
                     }
                 }
             }
-        } catch (IOException a){
+        }catch(IOException a){
             a.printStackTrace();
         }
-        
         return false;
-    }
-    public boolean Admin(String usuario) {
-        File archivoAdmin = new File("admin.txt"); 
-        try(Scanner scanner = new Scanner(archivoAdmin)) {
-            while(scanner.hasNextLine()) {
-                String linea = scanner.nextLine().trim();
-                if (linea.equals(usuario)) {
-                    return true; 
-                }
-            }
-        }catch(IOException a) {
-            a.printStackTrace();
-        }
-        return false; 
     }
 }
