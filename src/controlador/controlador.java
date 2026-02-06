@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 import modelo.modelo;
 import vista.vista;
 import vista.vistaMenuUsuario;
-import controlador.ControladorMenuAdmin;
 import vista.vistaReg;
 
 public class controlador implements ActionListener{
@@ -74,7 +73,7 @@ public class controlador implements ActionListener{
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
             if(cedula != null && this.modelo.Admin(cedula)){
                 //JOptionPane.showMessageDialog(null, "hola admin");
-                new ControladorMenuAdmin();
+                new ControladorDashboard();
                 vista.dispose();
             }else{
                 //JOptionPane.showMessageDialog(null, "hola usuario: " + usuario);
