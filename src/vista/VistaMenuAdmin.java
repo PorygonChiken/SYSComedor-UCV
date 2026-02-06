@@ -18,7 +18,7 @@ public class VistaMenuAdmin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panelFondo = new JPanel(new GridBagLayout());
-        panelFondo.setBackground(new Color(176, 224, 230)); 
+        panelFondo.setBackground(new Color(181, 246, 255)); 
 
         JPanel panelCaja = new JPanel();
         panelCaja.setLayout(new BoxLayout(panelCaja, BoxLayout.Y_AXIS));
@@ -57,7 +57,7 @@ public class VistaMenuAdmin extends JFrame {
         
         btnVer = new JButton("Ver Lista");
         
-        btnSalir = new JButton("Cerrar Sesión");
+        btnSalir = new JButton("salir");
         btnSalir.setBackground(new Color(255, 102, 102)); 
         btnSalir.setForeground(Color.WHITE);
 
