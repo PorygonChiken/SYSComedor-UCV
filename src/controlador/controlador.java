@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import modelo.modelo;
 import vista.vista;
 import vista.vistaMenuUsuario;
-import controlador.ControladorMenuAdmin;
 import vista.vistaReg;
 
 public class controlador implements ActionListener{
@@ -66,11 +65,9 @@ public class controlador implements ActionListener{
         if(datos){
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
             if(cedula != null && this.modelo.Admin(cedula)){
-               
                 new ControladorMenuAdmin();
                 vista.dispose();
             }else{
-                
                 vistaMenu.setUsuario(usuario);
                 String menu = this.modelo.Menu();
                 vistaMenu.setMenu(menu);

@@ -34,7 +34,7 @@ public class ControladorMenuAdmin implements ActionListener {
                 break;
             case "SALIR":
                 cerrarSesion();
-                new controlador();
+                new ControladorDashboard();
                 break;
         }
     }
