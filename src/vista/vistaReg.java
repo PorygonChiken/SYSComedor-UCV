@@ -28,41 +28,37 @@ public class vistaReg extends JFrame {
         registro.setBackground(Color.WHITE);
         registro.setPreferredSize(new Dimension(500, 320));
 
-        Dimension espacio10 = new Dimension(0, 10);
-        Dimension espacio20 = new Dimension(0, 20);
-        Dimension espacio30 = new Dimension(0,30);
-
-        registro.add(Box.createRigidArea(new Dimension(0, 20)));
+        registro.add(Box.createRigidArea(utils.espacio20));
 
         JLabel titulo = new JLabel("Registrarse");
         titulo.setFont(new Font("IMPACT", Font.PLAIN, 24));
         titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         registro.add(titulo);
 
-        registro.add(Box.createRigidArea(espacio30));
+        registro.add(Box.createRigidArea(utils.espacio30));
 
         txtNuevoUsuario = new JTextField(20);
         txtNuevaContrasena = new JPasswordField(20);
         txtCedula = new JTextField(20);
 
         registro.add(utils.crearFila("Usuario: ", txtNuevoUsuario));
-        registro.add(Box.createRigidArea(espacio10));
+        registro.add(Box.createRigidArea(utils.espacio10));
 
         registro.add(utils.crearFila("Cédula: ", txtCedula));
-        registro.add(Box.createRigidArea(espacio10));
+        registro.add(Box.createRigidArea(utils.espacio10));
         
         registro.add(utils.crearFila("Contraseña: ", txtNuevaContrasena));
-        registro.add(Box.createRigidArea(espacio30));
+        registro.add(Box.createRigidArea(utils.espacio30));
 
         btnRegistrar = utils.crearBoton("Registrar");
         registro.add(btnRegistrar);
 
-        registro.add(Box.createRigidArea(new Dimension(0, 10)));
+        registro.add(Box.createRigidArea(utils.espacio10));
         btnVolver = utils.crearBoton("Volver"); 
         btnVolver.setBackground(new Color(255, 100, 100)); 
         btnVolver.setForeground(Color.WHITE);
         registro.add(btnVolver);
-        registro.add(Box.createRigidArea(espacio20));
+        registro.add(Box.createRigidArea(utils.espacio20));
         panelPrincipal.add(registro);
         add(panelPrincipal);
     }

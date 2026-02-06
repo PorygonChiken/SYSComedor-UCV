@@ -27,33 +27,30 @@ public class vista extends JFrame {
         login.setBackground(Color.WHITE);
         login.setPreferredSize(new Dimension(500, 280));
 
-        Dimension espacio10 = new Dimension(0, 10);
-        Dimension espacio30 = new Dimension(0,30);
-
-        login.add(Box.createRigidArea(new Dimension(0, 20)));
+        login.add(Box.createRigidArea(utils.espacio20));
 
         JLabel titulo = new JLabel("SYSComedorUCV");
         titulo.setFont(new Font("IMPACT", Font.PLAIN, 24));
         titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         login.add(titulo);
 
-        login.add(Box.createRigidArea(espacio30));
+        login.add(Box.createRigidArea(utils.espacio30));
 
         txtUsuario = new JTextField(20);
         txtContrasena = new JPasswordField(20);
 
-        login.add(Box.createRigidArea(espacio10));
+        login.add(Box.createRigidArea(utils.espacio10));
 
         login.add(utils.crearFila("Usuario: ", txtUsuario));
-        login.add(Box.createRigidArea(espacio10));
+        login.add(Box.createRigidArea(utils.espacio10));
         
         login.add(utils.crearFila("Contraseña: ", txtContrasena));
-        login.add(Box.createRigidArea(espacio30));
+        login.add(Box.createRigidArea(utils.espacio30));
 
         btnLogin = utils.crearBoton("Iniciar sesión");
         login.add(btnLogin);
 
-        login.add(Box.createRigidArea(espacio10));
+        login.add(Box.createRigidArea(utils.espacio10));
 
         btnRegis = utils.crearBoton("Registrarse");
         btnRegis.setFont(new Font("ARIAL", Font.PLAIN, 12));
@@ -64,7 +61,7 @@ public class vista extends JFrame {
         btnRegis.setFocusPainted(false);
         login.add(btnRegis);
 
-        login.add(Box.createRigidArea(espacio30));
+        login.add(Box.createRigidArea(utils.espacio30));
 
         panelPrincipal.add(login);
         add(panelPrincipal);

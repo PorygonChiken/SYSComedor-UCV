@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
     
 public class menuUtils extends JFrame {
+    public Dimension espacio10 = new Dimension(0, 10);
+    public Dimension espacio20 = new Dimension(0, 20);
+    public Dimension espacio30 = new Dimension(0,30);
+
     public JPanel crearFila(String textoLabel, JTextField campo) {
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
         fila.setBackground(Color.WHITE);

@@ -52,7 +52,7 @@ public class controlador implements ActionListener{
             case "logout":
                 cerrarSesion(); 
                 break;
-            case "ver_menu":
+            /*case "ver_menu":
                 String menudia = "Menú de hoy\n\n"+
                 "sopa: Crema de Zanahoria\n"+
                 "comida: Pollo con arroz y tajadas\n"+
@@ -62,7 +62,7 @@ public class controlador implements ActionListener{
                 break;
             case "ver_saldo":
                 JOptionPane.showMessageDialog(vistaMenu, "Saldo actual: 1,000 bs", "Mi Monedero", JOptionPane.INFORMATION_MESSAGE);
-                break;
+                break;*/
         }
     }
 
@@ -73,16 +73,17 @@ public class controlador implements ActionListener{
         if(datos){
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
             if(cedula != null && this.modelo.Admin(cedula)){
-                JOptionPane.showMessageDialog(null, "hola admin");
+                //JOptionPane.showMessageDialog(null, "hola admin");
                 new ControladorMenuAdmin();
                 vista.dispose();
             }else{
-                JOptionPane.showMessageDialog(null, "hola usuario: " + usuario);
+                //JOptionPane.showMessageDialog(null, "hola usuario: " + usuario);
+                vistaMenu.setUsuario(usuario);
                 vistaMenu.setVisible(true);
                 vista.dispose();
             }
         }else{
-            JOptionPane.showMessageDialog(vista, "usuario o contraseña incorrectos", "error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     private void guardarNuevoUsuario(){
@@ -90,29 +91,30 @@ public class controlador implements ActionListener{
         String cedula = vistaRegi.getCedula();
         String cntr = vistaRegi.getContra();
         if(user.isEmpty() || cedula.isEmpty() || cntr.isEmpty()){
-            JOptionPane.showMessageDialog(vistaRegi, "Se tienen que llenar todos los datos");
+            JOptionPane.showMessageDialog(vistaRegi, "Se deben llenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if(!cedula.matches("[0-9]+")){
-            JOptionPane.showMessageDialog(vistaRegi, "solo numeros", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vistaRegi, "Solo números", "Error", JOptionPane.ERROR_MESSAGE);
             return; 
         }
         boolean guardar = this.modelo.registrarUsuario(user, cedula, cntr);
 
         if (guardar) {
-            JOptionPane.showMessageDialog(vistaRegi, "usuario registrado");
+            JOptionPane.showMessageDialog(vistaRegi, "Usuario registrado con éxito");
             vistaRegi.limpiar();
             vistaRegi.dispose(); 
             vista.setVisible(true); 
         }else{
-            JOptionPane.showMessageDialog(vistaRegi, "error al registrarse", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(vistaRegi, "Error al registrarse", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     private void cerrarSesion(){
-        int confirm = JOptionPane.showConfirmDialog(vistaMenu, "quiere cerrar sesión?", "Salir", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(vistaMenu, "Desea cerrar sesión?", "Salir", JOptionPane.YES_NO_OPTION);
         if(confirm == JOptionPane.YES_OPTION){
             vistaMenu.setVisible(false); 
+            vistaMenu.setUsuario("");
             vista.limpiar();             
             vista.setVisible(true);    
         }
