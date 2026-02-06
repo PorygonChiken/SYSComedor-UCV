@@ -5,11 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class vistaMenuUsuario extends JFrame {
+    
     public JButton btnSalir;
     private JLabel lblSaludo;
+    private JTextArea txtTextoMenu;     
+    private JLabel lblTextoMonedero; 
 
     public vistaMenuUsuario() {
-        menuUtils utils = new menuUtils();
         setTitle("Menú Principal");
         setSize(1200, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,50 +30,79 @@ public class vistaMenuUsuario extends JFrame {
 
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(Color.WHITE);
+        
         lblSaludo = new JLabel("Buenos días usuario");
         lblSaludo.setFont(new Font("ARIAL", Font.BOLD, 26));
         header.add(lblSaludo, BorderLayout.WEST);
 
-        btnSalir = utils.crearBoton("Cerrar sesión");
+        btnSalir = new JButton("Cerrar sesión");
+        btnSalir.setFont(new Font("ARIAL", Font.BOLD, 14));
         btnSalir.setBackground(new Color(230, 230, 230));
+        btnSalir.setFocusPainted(false);
+        btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
         header.add(btnSalir, BorderLayout.EAST);
 
         JPanel body = new JPanel();
         body.setBackground(Color.WHITE);
         body.setLayout(new BoxLayout(body, BoxLayout.X_AXIS));
 
-        JPanel panelMenu = crearSeccion(
-            "Menú del día",
-            "Placeholder",
-            false
-        );
+        JPanel panelMenu = new JPanel();
+        panelMenu.setBackground(Color.WHITE);
+        panelMenu.setLayout(new BoxLayout(panelMenu, BoxLayout.Y_AXIS));
+        panelMenu.setPreferredSize(new Dimension(560, 380));
+        
+        JLabel tituloMenu = new JLabel("Menú del día");
+        tituloMenu.setFont(new Font("ARIAL", Font.BOLD, 18));
+        tituloMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        txtTextoMenu = new JTextArea("Cargando menú...");
+        txtTextoMenu.setFont(new Font("ARIAL", Font.PLAIN, 16));
+        txtTextoMenu.setEditable(false);    
+        txtTextoMenu.setFocusable(false);      
+        txtTextoMenu.setBackground(Color.WHITE);
+        txtTextoMenu.setLineWrap(true);      
+        txtTextoMenu.setWrapStyleWord(true);
+        txtTextoMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
+  
+        txtTextoMenu.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0)); 
+        
+        panelMenu.add(tituloMenu);
+        panelMenu.add(Box.createRigidArea(new Dimension(0, 15)));
+        panelMenu.add(txtTextoMenu);
+        panelMenu.add(Box.createVerticalGlue());
 
-        JPanel panelMonedero = crearSeccion(
-            "Monedero",
-            "Placeholder",
-            true
-        );
+        JPanel panelMonedero = new JPanel();
+        panelMonedero.setBackground(Color.WHITE);
+        panelMonedero.setLayout(new BoxLayout(panelMonedero, BoxLayout.Y_AXIS));
+        
+        JLabel tituloMonedero = new JLabel("Monedero");
+        tituloMonedero.setFont(new Font("ARIAL", Font.BOLD, 18));
+        tituloMonedero.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        lblTextoMonedero = new JLabel("Saldo: --.-- Bs");
+        lblTextoMonedero.setFont(new Font("ARIAL", Font.PLAIN, 14));
+        lblTextoMonedero.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        panelMonedero.add(tituloMonedero);
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 15)));
+        panelMonedero.add(lblTextoMonedero);
+        panelMonedero.add(Box.createVerticalGlue());
 
         JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-        separator.setForeground(Color.BLACK);
+        separator.setForeground(Color.GRAY);
         separator.setMaximumSize(new Dimension(2, Integer.MAX_VALUE));
-
-        panelMenu.setPreferredSize(new Dimension(560, 380));
-        panelMenu.setMaximumSize(new Dimension(560, Integer.MAX_VALUE));
-
-        JPanel monederoWrapper = new JPanel(new BorderLayout());
-        monederoWrapper.setBackground(Color.WHITE);
-        monederoWrapper.setPreferredSize(new Dimension(240, 380));
-        monederoWrapper.setMaximumSize(new Dimension(240, Integer.MAX_VALUE));
-        monederoWrapper.add(panelMonedero, BorderLayout.CENTER);
 
         body.add(panelMenu);
         body.add(Box.createHorizontalGlue());
         body.add(separator);
         body.add(Box.createRigidArea(new Dimension(20, 0)));
+        
+        JPanel monederoWrapper = new JPanel(new BorderLayout());
+        monederoWrapper.setBackground(Color.WHITE);
+        monederoWrapper.setPreferredSize(new Dimension(240, 380));
+        monederoWrapper.add(panelMonedero, BorderLayout.CENTER);
+        
         body.add(monederoWrapper);
-        body.add(Box.createHorizontalGlue());
-
         JSeparator topLine = new JSeparator(SwingConstants.HORIZONTAL);
         topLine.setForeground(Color.BLACK);
 
@@ -88,42 +119,16 @@ public class vistaMenuUsuario extends JFrame {
         panelPrincipal.add(contenedor);
         add(panelPrincipal);
     }
-
-    private JPanel crearSeccion(String titulo, String placeholder, boolean centered) {
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.WHITE);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setFont(new Font("ARIAL", Font.BOLD, 18));
-        lblTitulo.setAlignmentX(centered ? Component.CENTER_ALIGNMENT : Component.LEFT_ALIGNMENT);
-
-        JLabel lblPlaceholder = new JLabel(placeholder);
-        lblPlaceholder.setFont(new Font("ARIAL", Font.ITALIC, 14));
-        lblPlaceholder.setAlignmentX(centered ? Component.CENTER_ALIGNMENT : Component.LEFT_ALIGNMENT);
-
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(lblTitulo);
-        panel.add(Box.createRigidArea(new Dimension(0, 15)));
-        panel.add(lblPlaceholder);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-        panel.add(Box.createVerticalGlue());
-
-        return panel;
-    }
-
     public void setUsuario(String usuario) {
         lblSaludo.setText("Bienvenido, " + usuario);
     }
+    public void setMenu(String textoMenu) {
+        txtTextoMenu.setText(textoMenu);
+    }
 
-    /*public void setMenu() {
-       
-    }*/
-
-    /*public void setMonedero() {
-        
-    }*/
+    public void setMonedero(String saldo) {
+        lblTextoMonedero.setText(saldo + " Bs");
+    }
 
     public void setControlador(ActionListener ac) {
         btnSalir.addActionListener(ac);

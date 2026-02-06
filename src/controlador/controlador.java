@@ -2,6 +2,10 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
 import javax.swing.JOptionPane;
 import modelo.modelo;
 import vista.vista;
@@ -52,17 +56,6 @@ public class controlador implements ActionListener{
             case "logout":
                 cerrarSesion(); 
                 break;
-            /*case "ver_menu":
-                String menudia = "Menú de hoy\n\n"+
-                "sopa: Crema de Zanahoria\n"+
-                "comida: Pollo con arroz y tajadas\n"+
-                "jugo: Jugo de naranja\n"+
-                "horario: 11:30am - 1:00pm";      
-                JOptionPane.showMessageDialog(vistaMenu, menudia, "Menú del Comedor", JOptionPane.INFORMATION_MESSAGE);
-                break;
-            case "ver_saldo":
-                JOptionPane.showMessageDialog(vistaMenu, "Saldo actual: 1,000 bs", "Mi Monedero", JOptionPane.INFORMATION_MESSAGE);
-                break;*/
         }
     }
 
@@ -73,12 +66,16 @@ public class controlador implements ActionListener{
         if(datos){
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
             if(cedula != null && this.modelo.Admin(cedula)){
-                //JOptionPane.showMessageDialog(null, "hola admin");
+               
                 new ControladorMenuAdmin();
                 vista.dispose();
             }else{
-                //JOptionPane.showMessageDialog(null, "hola usuario: " + usuario);
+                
                 vistaMenu.setUsuario(usuario);
+                String menu = this.modelo.Menu();
+                vistaMenu.setMenu(menu);
+                String saldo = this.modelo.Saldo(usuario);
+                vistaMenu.setMonedero(saldo);
                 vistaMenu.setVisible(true);
                 vista.dispose();
             }

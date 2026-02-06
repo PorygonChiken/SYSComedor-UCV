@@ -42,13 +42,13 @@ public class modelo{
         }
         return false;
     }
-    public boolean registrarUsuario(String usuario, String cedula, String contra) {
-        try{
+   public boolean registrarUsuario(String usuario, String cedula, String contra) {
+        try {
             FileWriter escribir = new FileWriter(archivo, true);
-            escribir.write(usuario + ";" + cedula + ";" + contra + "\n");
+            escribir.write(usuario + ";" + cedula + ";" + contra + ";0\n");
             escribir.close();
             return true;
-        }catch (IOException a) {
+        } catch (IOException a) {
             a.printStackTrace();
             return false;
         }
@@ -70,5 +70,39 @@ public class modelo{
             a.printStackTrace();
         }
         return false;
+    }
+   public String Menu() {
+        File f = new File("menus_db.txt");
+        StringBuilder menu = new StringBuilder();
+        try (Scanner scanner = new Scanner(f)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split("#");
+                if (datos.length >= 4) {
+                    menu.append("• ").append(datos[1])
+                              .append(" .......... ").append(datos[3]).append(" Bs")
+                              .append("\n"); 
+                }
+            }
+        } catch (Exception e) {
+            return "Error leyendo el menú.";
+        }
+          
+        return menu.toString();
+    }
+    public String Saldo(String saldo) {
+        File f = new File("usuarios.txt");
+        try (Scanner scanner = new Scanner(f)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split(";");
+                if (datos.length >= 4 && datos[0].equals(saldo)) {
+                    return datos[3]; 
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "0"; 
     }
 }
