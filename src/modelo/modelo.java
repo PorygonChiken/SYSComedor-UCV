@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class modelo{
     private String archivo;
@@ -71,23 +73,35 @@ public class modelo{
         }
         return false;
     }
-   public String Menu() {
+    public String Menu() {
         File f = new File("menus_db.txt");
         StringBuilder menu = new StringBuilder();
+        if (!f.exists()) {
+            return "No hay menú para hoy.";
+        }
+        String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
         try (Scanner scanner = new Scanner(f)) {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] datos = linea.split("#");
                 if (datos.length >= 4) {
-                    menu.append("• ").append(datos[1])
-                              .append(" .......... ").append(datos[3]).append(" Bs")
-                              .append("\n"); 
+                    if (datos[0].trim().equals(fechaHoy)) {
+                        menu.append("• ").append(datos[1])
+                                  .append(" ..........................")
+                                  .append(".......................... ")
+                                  .append(datos[3]).append(" Bs")
+                                  .append("\n");
+                    }
                 }
             }
         } catch (Exception e) {
             return "Error leyendo el menú.";
         }
-          
+
+        if (menu.length() == 0) {
+            return "No hay menú para hoy.";
+        }
+
         return menu.toString();
     }
     public String Saldo(String saldo) {

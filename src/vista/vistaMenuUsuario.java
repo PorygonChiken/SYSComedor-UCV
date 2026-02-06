@@ -55,7 +55,7 @@ public class vistaMenuUsuario extends JFrame {
         tituloMenu.setFont(new Font("ARIAL", Font.BOLD, 18));
         tituloMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        txtTextoMenu = new JTextArea("Cargando menú...");
+        txtTextoMenu = new JTextArea("C");
         txtTextoMenu.setFont(new Font("ARIAL", Font.PLAIN, 16));
         txtTextoMenu.setEditable(false);    
         txtTextoMenu.setFocusable(false);      
@@ -79,12 +79,12 @@ public class vistaMenuUsuario extends JFrame {
         tituloMonedero.setFont(new Font("ARIAL", Font.BOLD, 18));
         tituloMonedero.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        lblTextoMonedero = new JLabel("Saldo: --.-- Bs");
+        lblTextoMonedero = new JLabel("S");
         lblTextoMonedero.setFont(new Font("ARIAL", Font.PLAIN, 14));
         lblTextoMonedero.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         panelMonedero.add(tituloMonedero);
-        panelMonedero.add(Box.createRigidArea(new Dimension(0, 15)));
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 120)));
         panelMonedero.add(lblTextoMonedero);
         panelMonedero.add(Box.createVerticalGlue());
 
@@ -128,6 +128,7 @@ public class vistaMenuUsuario extends JFrame {
 
     public void setMonedero(String saldo) {
         lblTextoMonedero.setText(saldo + " Bs");
+        lblTextoMonedero.setFont(new Font("ARIAL", Font.BOLD, 42));
     }
 
     public void setControlador(ActionListener ac) {
