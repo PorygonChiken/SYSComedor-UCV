@@ -11,58 +11,37 @@ public class VistaAdminDashboard extends JFrame {
     public JButton btnCerrarSesion;
 
     public VistaAdminDashboard() {
-        setTitle("Menú Administrador - Comedor UCV");
-        setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        menuUtils.configurarFrame(this, "Menú Administrador - Comedor UCV", 1200, 720, JFrame.EXIT_ON_CLOSE);
 
-        JPanel panelPrincipal = new JPanel(new GridBagLayout());
-        panelPrincipal.setBackground(new Color(181, 246, 255));
+        JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
+        JPanel menuPanel = menuUtils.crearPanelCaja(new Dimension(500, 430));
 
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        menuPanel.setBackground(Color.WHITE);
-        
-        menuPanel.setPreferredSize(new Dimension(500, 430)); 
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20)); 
 
-  
-        Dimension espacio10 = new Dimension(0, 10);
-        Dimension espacio20 = new Dimension(0, 20);
-        Dimension espacio30 = new Dimension(0, 30);
+        menuPanel.add(menuUtils.crearTitulo("Bienvenido Administrador"));
 
-     
-        
-        menuPanel.add(Box.createRigidArea(espacio20)); 
-
-     
-        JLabel titulo = new JLabel("Bienvenido Administrador");
-        titulo.setFont(new Font("IMPACT", Font.PLAIN, 24));
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        menuPanel.add(titulo);
-
-        menuPanel.add(Box.createRigidArea(espacio30)); 
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30)); 
 
        
-        btnInventario = crearBoton("Inventario");
+        btnInventario = menuUtils.crearBoton("Inventario", new Dimension(300, 40));
         menuPanel.add(btnInventario);
-        menuPanel.add(Box.createRigidArea(espacio10));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        btnReporteDemanda = crearBoton("Generar Reporte de Demanda");
+        btnReporteDemanda = menuUtils.crearBoton("Generar Reporte de Demanda", new Dimension(300, 40));
         menuPanel.add(btnReporteDemanda);
-        menuPanel.add(Box.createRigidArea(espacio10));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        btnRegistrarConsumo = crearBoton("Registrar Consumo");
+        btnRegistrarConsumo = menuUtils.crearBoton("Registrar Consumo", new Dimension(300, 40));
         menuPanel.add(btnRegistrarConsumo);
-        menuPanel.add(Box.createRigidArea(espacio10));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        btnGestionarMenus = crearBoton("Gestionar Menús");
+        btnGestionarMenus = menuUtils.crearBoton("Gestionar Menús", new Dimension(300, 40));
         menuPanel.add(btnGestionarMenus);
-        menuPanel.add(Box.createRigidArea(espacio10));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        menuPanel.add(Box.createRigidArea(espacio30)); 
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30)); 
 
-        btnCerrarSesion = crearBoton("Cerrar Sesión");
+        btnCerrarSesion = menuUtils.crearBoton("Cerrar Sesión", new Dimension(300, 40));
         btnCerrarSesion.setBackground(new Color(255, 100, 100));
         btnCerrarSesion.setForeground(Color.WHITE);
         menuPanel.add(btnCerrarSesion);
@@ -70,16 +49,6 @@ public class VistaAdminDashboard extends JFrame {
      
         panelPrincipal.add(menuPanel);
         add(panelPrincipal);
-    }
-
-    private JButton crearBoton(String texto){
-        JButton boton = new JButton(texto);
-        boton.setFont(new Font("ARIAL", Font.BOLD, 16));
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        boton.setFocusPainted(false);
-        boton.setMaximumSize(new Dimension(300, 40)); 
-        return boton;
     }
 
     public static void main(String[] args) {

@@ -13,52 +13,39 @@ public class vistaReg extends JFrame {
     public JButton btnVolver;
 
     public vistaReg() {
-        menuUtils utils = new menuUtils();
-        setTitle("Registro Comedor UCV");
-        setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setLocationRelativeTo(null);
+        menuUtils.configurarFrame(this, "Registro Comedor UCV", 1200, 720, JFrame.DO_NOTHING_ON_CLOSE);
 
-        JPanel panelPrincipal = new JPanel(new GridBagLayout());
-        panelPrincipal.setBackground(new Color(181, 246, 255));
+        JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
+        JPanel registro = menuUtils.crearPanelCaja(new Dimension(500, 320));
 
-        JPanel registro = new JPanel();
-        registro.setLayout(new BoxLayout(registro, BoxLayout.Y_AXIS));
-        registro.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        registro.setBackground(Color.WHITE);
-        registro.setPreferredSize(new Dimension(500, 320));
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_20));
 
-        registro.add(Box.createRigidArea(utils.espacio20));
+        registro.add(menuUtils.crearTitulo("Registrarse"));
 
-        JLabel titulo = new JLabel("Registrarse");
-        titulo.setFont(new Font("IMPACT", Font.PLAIN, 24));
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        registro.add(titulo);
-
-        registro.add(Box.createRigidArea(utils.espacio30));
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_30));
 
         txtNuevoUsuario = new JTextField(20);
         txtNuevaContrasena = new JPasswordField(20);
         txtCedula = new JTextField(20);
 
-        registro.add(utils.crearFila("Usuario: ", txtNuevoUsuario));
-        registro.add(Box.createRigidArea(utils.espacio10));
+        registro.add(menuUtils.crearFila("Usuario: ", txtNuevoUsuario));
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        registro.add(utils.crearFila("Cédula: ", txtCedula));
-        registro.add(Box.createRigidArea(utils.espacio10));
+        registro.add(menuUtils.crearFila("Cédula: ", txtCedula));
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_10));
         
-        registro.add(utils.crearFila("Contraseña: ", txtNuevaContrasena));
-        registro.add(Box.createRigidArea(utils.espacio30));
+        registro.add(menuUtils.crearFila("Contraseña: ", txtNuevaContrasena));
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_30));
 
-        btnRegistrar = utils.crearBoton("Registrar");
+        btnRegistrar = menuUtils.crearBoton("Registrar");
         registro.add(btnRegistrar);
 
-        registro.add(Box.createRigidArea(utils.espacio10));
-        btnVolver = utils.crearBoton("Volver"); 
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_10));
+        btnVolver = menuUtils.crearBoton("Volver"); 
         btnVolver.setBackground(new Color(255, 100, 100)); 
         btnVolver.setForeground(Color.WHITE);
         registro.add(btnVolver);
-        registro.add(Box.createRigidArea(utils.espacio20));
+        registro.add(Box.createRigidArea(menuUtils.ESPACIO_20));
         panelPrincipal.add(registro);
         add(panelPrincipal);
     }

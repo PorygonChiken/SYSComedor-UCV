@@ -17,16 +17,8 @@ public class VistaMenuAdmin extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panelFondo = new JPanel(new GridBagLayout());
-        panelFondo.setBackground(new Color(181, 246, 255)); 
-
-        JPanel panelCaja = new JPanel();
-        panelCaja.setLayout(new BoxLayout(panelCaja, BoxLayout.Y_AXIS));
-        panelCaja.setBackground(Color.WHITE);
-        panelCaja.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.BLACK, 2),
-                BorderFactory.createEmptyBorder(20, 40, 20, 40) 
-        ));
+        JPanel panelFondo = menuUtils.crearPanelPrincipal();
+        JPanel panelCaja = menuUtils.crearPanelCajaPadding(null, new Insets(20, 40, 20, 40));
 
         JLabel lblTitulo = new JLabel("Configuración de Menú");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));

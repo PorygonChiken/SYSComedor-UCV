@@ -12,13 +12,9 @@ public class vistaMenuUsuario extends JFrame {
     private JLabel lblTextoMonedero; 
 
     public vistaMenuUsuario() {
-        setTitle("Menú Principal");
-        setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        menuUtils.configurarFrame(this, "Menú Principal", 1200, 720, JFrame.EXIT_ON_CLOSE);
 
-        JPanel panelPrincipal = new JPanel(new GridBagLayout());
-        panelPrincipal.setBackground(new Color(181, 246, 255));
+        JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
 
         JPanel contenedor = new JPanel(new BorderLayout(0, 20));
         contenedor.setBackground(Color.WHITE);

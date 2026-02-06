@@ -12,47 +12,34 @@ public class vista extends JFrame {
     public JButton btnRegis;
 
     public vista() {
-        menuUtils utils = new menuUtils();
-        setTitle("Comedor UCV");
-        setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        menuUtils.configurarFrame(this, "Comedor UCV", 1200, 720, JFrame.EXIT_ON_CLOSE);
 
-        JPanel panelPrincipal = new JPanel(new GridBagLayout());
-        panelPrincipal.setBackground(new Color(181, 246, 255));
+        JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
+        JPanel login = menuUtils.crearPanelCaja(new Dimension(500, 280));
 
-        JPanel login = new JPanel();
-        login.setLayout(new BoxLayout(login, BoxLayout.Y_AXIS));
-        login.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        login.setBackground(Color.WHITE);
-        login.setPreferredSize(new Dimension(500, 280));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_20));
 
-        login.add(Box.createRigidArea(utils.espacio20));
+        login.add(menuUtils.crearTitulo("SYSComedorUCV"));
 
-        JLabel titulo = new JLabel("SYSComedorUCV");
-        titulo.setFont(new Font("IMPACT", Font.PLAIN, 24));
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        login.add(titulo);
-
-        login.add(Box.createRigidArea(utils.espacio30));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_30));
 
         txtUsuario = new JTextField(20);
         txtContrasena = new JPasswordField(20);
 
-        login.add(Box.createRigidArea(utils.espacio10));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        login.add(utils.crearFila("Usuario: ", txtUsuario));
-        login.add(Box.createRigidArea(utils.espacio10));
+        login.add(menuUtils.crearFila("Usuario: ", txtUsuario));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_10));
         
-        login.add(utils.crearFila("Contraseña: ", txtContrasena));
-        login.add(Box.createRigidArea(utils.espacio30));
+        login.add(menuUtils.crearFila("Contraseña: ", txtContrasena));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_30));
 
-        btnLogin = utils.crearBoton("Iniciar sesión");
+        btnLogin = menuUtils.crearBoton("Iniciar sesión");
         login.add(btnLogin);
 
-        login.add(Box.createRigidArea(utils.espacio10));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        btnRegis = utils.crearBoton("Registrarse");
+        btnRegis = menuUtils.crearBoton("Registrarse");
         btnRegis.setFont(new Font("ARIAL", Font.PLAIN, 12));
         btnRegis.setBorderPainted(false);
         btnRegis.setContentAreaFilled(false);
@@ -61,7 +48,7 @@ public class vista extends JFrame {
         btnRegis.setFocusPainted(false);
         login.add(btnRegis);
 
-        login.add(Box.createRigidArea(utils.espacio30));
+        login.add(Box.createRigidArea(menuUtils.ESPACIO_30));
 
         panelPrincipal.add(login);
         add(panelPrincipal);
