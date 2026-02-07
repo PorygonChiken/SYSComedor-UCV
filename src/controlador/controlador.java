@@ -65,7 +65,7 @@ public class controlador implements ActionListener{
         if(datos){
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
             if(cedula != null && this.modelo.Admin(cedula)){
-                new ControladorMenuAdmin();
+                new ControladorDashboard();
                 vista.dispose();
             }else{
                 vistaMenu.setUsuario(usuario);
