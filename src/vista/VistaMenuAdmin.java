@@ -6,71 +6,77 @@ import java.awt.event.ActionListener;
 
 public class VistaMenuAdmin extends JFrame {
 
-    private JTextField txtFecha, txtPlato, txtRaciones;
-    private JTextField txtCostoFijo, txtCostoVariable, txtMerma;
-    private JTextArea areaReporte; 
- 
-    private JButton btnGuardar, btnVer, btnSalir;
+    private JTextField txtFecha;
+    private JTextField txtPlato;
+    private JTextField txtRaciones;
+    private JTextField txtCostoFijo;  
+    private JTextField txtCostoVariable;
+    private JTextField txtMerma;
+    private JButton btnGuardar;
+    private JButton btnVer;
+    private JButton btnSalir;
 
+    
     public VistaMenuAdmin() {
-        setTitle("Administrador - Comedor");
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        menuUtils.configurarFrame(this, "Administración - Comedor UCV", 1000, 720, JFrame.EXIT_ON_CLOSE);
 
-        JPanel panelFondo = menuUtils.crearPanelPrincipal();
-        JPanel panelCaja = menuUtils.crearPanelCajaPadding(null, new Insets(20, 40, 20, 40));
-
-        JLabel lblTitulo = new JLabel("Configuración de Menú");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
-        panelFormulario.setBackground(Color.WHITE);
+        JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
         
-        txtFecha = new JTextField();
-        txtPlato = new JTextField();
-        txtRaciones = new JTextField();
-        txtCostoFijo = new JTextField();
-        txtCostoVariable = new JTextField();
-        txtMerma = new JTextField();
+        JPanel menuPanel = menuUtils.crearPanelCaja(new Dimension(500, 650));
 
-        panelFormulario.add(new JLabel("Fecha:"));           panelFormulario.add(txtFecha);
-        panelFormulario.add(new JLabel("Plato Principal:")); panelFormulario.add(txtPlato);
-        panelFormulario.add(new JLabel("N° Raciones:"));     panelFormulario.add(txtRaciones);
-        panelFormulario.add(new JLabel("Costo Fijo:"));      panelFormulario.add(txtCostoFijo);
-        panelFormulario.add(new JLabel("Costo Variable:"));  panelFormulario.add(txtCostoVariable);
-        panelFormulario.add(new JLabel("% Merma (ej: 10):"));panelFormulario.add(txtMerma);
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20));
+        menuPanel.add(menuUtils.crearTitulo("GESTIÓN DE MENÚ"));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20));
 
-        areaReporte = new JTextArea(3, 20);
-        areaReporte.setVisible(false); 
+        this.txtFecha = new JTextField();
+        this.txtPlato = new JTextField();
+        this.txtRaciones = new JTextField();
+        this.txtCostoFijo = new JTextField();
+        this.txtCostoVariable = new JTextField();
+        this.txtMerma = new JTextField();
 
-        btnGuardar = new JButton("Guardar y Calcular");
-        btnGuardar.setBackground(new Color(240, 240, 240));
+        menuPanel.add(menuUtils.crearFila("Fecha:", this.txtFecha));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
+
+        menuPanel.add(menuUtils.crearFila("Plato :", this.txtPlato));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
+
+        menuPanel.add(menuUtils.crearFila("N° Raciones:", this.txtRaciones));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
+
+        menuPanel.add(menuUtils.crearFila("Costo Fijo:", this.txtCostoFijo));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
+
+        menuPanel.add(menuUtils.crearFila("Costo Var.:", this.txtCostoVariable));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
+
+        menuPanel.add(menuUtils.crearFila("% Merma:", this.txtMerma));
         
-        btnVer = new JButton("Ver Lista");
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30));
+        Dimension dimBoton = new Dimension(300, 40);
+
+        this.btnGuardar = menuUtils.crearBoton("Calcular y Guardar");
+        this.btnGuardar.setMaximumSize(dimBoton); 
+        this.btnGuardar.setBackground(new Color(220, 235, 245));
+        menuPanel.add(this.btnGuardar);
         
-        btnSalir = new JButton("salir");
-        btnSalir.setBackground(new Color(255, 102, 102)); 
-        btnSalir.setForeground(Color.WHITE);
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(Color.WHITE);
-        panelBotones.add(btnVer);
-        panelBotones.add(btnSalir);
-
-        panelCaja.add(lblTitulo);
-        panelCaja.add(Box.createVerticalStrut(20)); 
-        panelCaja.add(panelFormulario);
-        panelCaja.add(Box.createVerticalStrut(20)); 
+        this.btnVer = menuUtils.crearBoton("Ver Menús");
+        this.btnVer.setMaximumSize(dimBoton);
+        this.btnVer.setBackground(new Color(220, 235, 245));
+        menuPanel.add(this.btnVer);
         
-        btnGuardar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelCaja.add(btnGuardar);
-        panelCaja.add(Box.createVerticalStrut(10));
-        panelCaja.add(panelBotones);
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20));
 
-        panelFondo.add(panelCaja);
+        this.btnSalir = menuUtils.crearBoton("salir");
+        this.btnSalir.setMaximumSize(dimBoton);
+        this.btnSalir.setBackground(new Color(255, 100, 100));
+        this.btnSalir.setForeground(Color.WHITE);
+        menuPanel.add(this.btnSalir);
 
-        add(panelFondo);
+        panelPrincipal.add(menuPanel);
+        add(panelPrincipal);
     }
 
     public String getFecha() { return txtFecha.getText(); }
@@ -80,14 +86,21 @@ public class VistaMenuAdmin extends JFrame {
     public String getCostoVariable() { return txtCostoVariable.getText(); }
     public String getMerma() { return txtMerma.getText(); }
 
-    public void setAreaReporte(String texto) { 
-
-        JOptionPane.showMessageDialog(this, texto);
-    }
-
     public void limpiarCampos() {
-        txtFecha.setText(""); txtPlato.setText(""); txtRaciones.setText("");
-        txtCostoFijo.setText(""); txtCostoVariable.setText(""); txtMerma.setText("");
+        txtFecha.setText(""); 
+        txtPlato.setText(""); 
+        txtRaciones.setText("");
+        txtCostoFijo.setText(""); 
+        txtCostoVariable.setText(""); 
+        txtMerma.setText("");
+    }
+    
+    public void setAreaReporte(String texto) {
+        JTextArea area = new JTextArea(texto);
+        area.setEditable(false);
+        JScrollPane scroll = new JScrollPane(area);
+        scroll.setPreferredSize(new java.awt.Dimension(400, 300)); 
+        JOptionPane.showMessageDialog(this, scroll, "Reporte de Menús", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void setControlador(ActionListener c) {

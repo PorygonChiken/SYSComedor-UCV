@@ -8,7 +8,6 @@ public class ModeloMenuTXT {
 
     public void guardarMenu(Menu menu) {
         try (FileWriter escritor = new FileWriter(archivo, true)) {
-            // Guarda: Fecha#Tipo#Raciones#Costo
             escritor.write(menu.toTXT() + "\n");
         } catch (IOException e) {
             e.printStackTrace();
@@ -24,14 +23,11 @@ public class ModeloMenuTXT {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] datos = linea.split("#");
-                
-                // AHORA ESPERAMOS 4 DATOS (Incluyendo el costo)
-                if (datos.length >= 4) {
-                    // datos[3] es el costo. Lo parseamos para mostrarlo bonito
-                    double costo = Double.parseDouble(datos[3]);
-                    
-                    sb.append(datos[0]) // Fecha
-                      .append(" - ").append(datos[1]) // Plato
+
+                if (datos.length >= 4) {                 
+                    double costo = Double.parseDouble(datos[3]);     
+                    sb.append(datos[0]) 
+                      .append(" - ").append(datos[1]) 
                       .append(" (").append(datos[2]).append(" rac.)")
                       .append(" -> Costo: ").append(String.format("%.2f", costo)).append(" Bs.")
                       .append("\n");
