@@ -77,20 +77,31 @@ public class modelo{
         File f = new File("menus_db.txt");
         StringBuilder menu = new StringBuilder();
         if (!f.exists()) {
-            return "No hay menú para hoy.";
+            return "No hay menú en los últimos 7 días.";
         }
-        String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("d/MM/yyyy"));
+        LocalDate hoy = LocalDate.now();
+        LocalDate inicio = hoy.minusDays(6);
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/MM/yyyy");
         try (Scanner scanner = new Scanner(f)) {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] datos = linea.split("#");
                 if (datos.length >= 4) {
-                    if (datos[0].trim().equals(fechaHoy)) {
-                        menu.append("• ").append(datos[1])
-                                  .append(" ..........................")
-                                  .append(".......................... ")
-                                  .append(datos[3]).append(" Bs")
-                                  .append("\n");
+                    String fechaTexto = datos[0].trim();
+                    LocalDate fechaMenu;
+                    try {
+                        fechaMenu = LocalDate.parse(fechaTexto, formato);
+                    } catch (Exception ex) {
+                        continue;
+                    }
+                    if (!fechaMenu.isBefore(inicio) && !fechaMenu.isAfter(hoy)) {
+                        menu.append("• ")
+                            //.append(fechaTexto).append(" - ")
+                            .append(datos[1])
+                            .append(" ..........................")
+                            .append(".......................... ")
+                            .append(datos[3]).append(" Bs")
+                            .append("\n");
                     }
                 }
             }
@@ -99,7 +110,7 @@ public class modelo{
         }
 
         if (menu.length() == 0) {
-            return "No hay menú para hoy.";
+            return "No hay menú en los últimos 7 días.";
         }
 
         return menu.toString();
