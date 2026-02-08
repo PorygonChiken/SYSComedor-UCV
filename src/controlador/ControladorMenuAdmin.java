@@ -3,7 +3,7 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-
+import modelo.modelo;
 import modelo.CalculadoraCostos;
 import modelo.Menu;
 import modelo.ModeloMenuTXT;
@@ -12,13 +12,14 @@ import vista.VistaMenuAdmin;
 public class ControladorMenuAdmin implements ActionListener {
     private VistaMenuAdmin vista;
     private ModeloMenuTXT modelo;
+    private modelo modeloLectura;
     private CalculadoraCostos calculadora; 
 
     public ControladorMenuAdmin() {
         this.vista = new VistaMenuAdmin();
         this.modelo = new ModeloMenuTXT();
+        this.modeloLectura = new modelo();
         this.calculadora = new CalculadoraCostos(); 
-        
         this.vista.setControlador(this);
         this.vista.setVisible(true);
     }
@@ -78,7 +79,7 @@ public class ControladorMenuAdmin implements ActionListener {
     }
 
     private void mostrarMenus() {
-        String listado = modelo.leerMenus();
+        String listado = modeloLectura.Menu();
         vista.setAreaReporte(listado);
     }
 
