@@ -2,9 +2,6 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 import modelo.modelo;
@@ -64,7 +61,25 @@ public class controlador implements ActionListener{
         boolean datos = this.modelo.verificar(usuario, cntr);
         if(datos){
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
-            String rol =  this.modelo.obtenerRol(cedula);
+            if (cedula == null || cedula.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    vista,
+                    "No se encontro la cedula del usuario.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+            String rol = this.modelo.obtenerRol(cedula);
+            if (rol == null) {
+                JOptionPane.showMessageDialog(
+                    vista,
+                    "No se encontro el rol en la base de datos.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
             if(rol.equals("admin")){
                 new ControladorDashboard();
                 vista.dispose();

@@ -4,7 +4,8 @@ import java.io.*;
 import java.util.Scanner;
 
 public class ModeloMenuTXT {
-    private String archivo = "menus_db.txt";
+    private static final String DATA_DIR = "data";
+    private final File archivo = new File(DATA_DIR, "menus_db.txt");
 
     public void guardarMenu(Menu menu) {
         try (FileWriter escritor = new FileWriter(archivo, true)) {
@@ -16,10 +17,9 @@ public class ModeloMenuTXT {
 
     public String leerMenus() {
         StringBuilder sb = new StringBuilder();
-        File f = new File(archivo);
-        if (!f.exists()) return "No hay registros.";
+        if (!archivo.exists()) return "No hay registros.";
 
-        try (Scanner scanner = new Scanner(f)) {
+        try (Scanner scanner = new Scanner(archivo)) {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] datos = linea.split("#");

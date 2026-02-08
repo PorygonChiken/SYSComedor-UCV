@@ -8,12 +8,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class modelo{
-    private String archivo;
+    private static final String DATA_DIR = "data";
+    private final File archivoUsuarios = new File(DATA_DIR, "usuarios.txt");
+    private final File archivoDb = new File(DATA_DIR, "db_ucv.txt");
+    private final File archivoMenus = new File(DATA_DIR, "menus_db.txt");
+
     public modelo(){
-        this.archivo = "usuarios.txt";
     }
     public String obtenerCedulaPorUsuario(String usuario){
-        File f = new File(archivo);
+        File f = archivoUsuarios;
         if (!f.exists()) return null;
         try(Scanner scanner = new Scanner(f)){
             while(scanner.hasNextLine()){
@@ -31,7 +34,7 @@ public class modelo{
         return null; 
     }
     public String obtenerRol(String cedula){
-        File f = new File("db_ucv.txt");
+        File f = archivoDb;
         try(Scanner scanner = new Scanner(f)){
             while(scanner.hasNextLine()){
                 String linea = scanner.nextLine();
@@ -50,7 +53,7 @@ public class modelo{
     }
    public boolean registrarUsuario(String usuario, String cedula, String contra) {
         try {
-            FileWriter escribir = new FileWriter(archivo, true);
+            FileWriter escribir = new FileWriter(archivoUsuarios, true);
             escribir.write(usuario + ";" + cedula + ";" + contra + ";0\n");
             escribir.close();
             return true;
@@ -61,7 +64,7 @@ public class modelo{
     }
 
     public boolean verificar(String usuario, String contra) {
-        File f = new File(archivo);
+        File f = archivoUsuarios;
         if(!f.exists()) return false;
         try(Scanner scanner = new Scanner(f)) {
             while (scanner.hasNextLine()) {
@@ -78,7 +81,7 @@ public class modelo{
         return false;
     }
     public String Menu() {
-        File f = new File("menus_db.txt");
+        File f = archivoMenus;
         StringBuilder menu = new StringBuilder();
         if (!f.exists()) {
             return "No hay menú en los últimos 7 días.";
@@ -120,7 +123,7 @@ public class modelo{
         return menu.toString();
     }
     public String Saldo(String saldo) {
-        File f = new File("usuarios.txt");
+        File f = archivoUsuarios;
         try (Scanner scanner = new Scanner(f)) {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
