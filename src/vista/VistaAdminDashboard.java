@@ -4,9 +4,7 @@ import java.awt.*;
 
 public class VistaAdminDashboard extends JFrame {
 
-    public JButton btnInventario;
-    public JButton btnReporteDemanda;
-    public JButton btnRegistrarConsumo;
+
     public JButton btnGestionarMenus;
     public JButton btnCerrarSesion;
 
@@ -22,24 +20,9 @@ public class VistaAdminDashboard extends JFrame {
 
         menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30)); 
 
-       
-        btnInventario = menuUtils.crearBoton("Inventario", new Dimension(300, 40));
-        menuPanel.add(btnInventario);
-        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
-
-        btnReporteDemanda = menuUtils.crearBoton("Generar Reporte de Demanda", new Dimension(300, 40));
-        menuPanel.add(btnReporteDemanda);
-        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
-
-        btnRegistrarConsumo = menuUtils.crearBoton("Registrar Consumo", new Dimension(300, 40));
-        menuPanel.add(btnRegistrarConsumo);
-        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
-
         btnGestionarMenus = menuUtils.crearBoton("Gestionar Menús", new Dimension(300, 40));
         menuPanel.add(btnGestionarMenus);
-        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
-
-        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30)); 
+        menuPanel.add(Box.createRigidArea(new Dimension(0, 200)));
 
         btnCerrarSesion = menuUtils.crearBoton("Cerrar Sesión", new Dimension(300, 40));
         btnCerrarSesion.setBackground(new Color(255, 100, 100));

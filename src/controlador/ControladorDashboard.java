@@ -12,7 +12,6 @@ public class ControladorDashboard implements ActionListener {
     
         this.vista = new VistaAdminDashboard(); 
         
-     
         this.vista.btnGestionarMenus.addActionListener(this);
         this.vista.btnCerrarSesion.addActionListener(this);
      
