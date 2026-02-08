@@ -64,11 +64,12 @@ public class controlador implements ActionListener{
         boolean datos = this.modelo.verificar(usuario, cntr);
         if(datos){
             String cedula = this.modelo.obtenerCedulaPorUsuario(usuario);
-            if(cedula != null && this.modelo.Admin(cedula)){
+            String rol =  this.modelo.obtenerRol(cedula);
+            if(rol.equals("admin")){
                 new ControladorDashboard();
                 vista.dispose();
             }else{
-                vistaMenu.setUsuario(usuario);
+                vistaMenu.setUsuario(usuario + " (" + rol + ")");
                 String menu = this.modelo.Menu();
                 vistaMenu.setMenu(menu);
                 String saldo = this.modelo.Saldo(usuario);

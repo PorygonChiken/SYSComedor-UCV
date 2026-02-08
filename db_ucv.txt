@@ -1,0 +1,4 @@
+11111111;admin
+22222222;empleado
+33333333;estudiante
+44444444;ADMIN

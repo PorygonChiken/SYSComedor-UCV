@@ -30,19 +30,23 @@ public class modelo{
         }
         return null; 
     }
-    public boolean Admin(String cedula) {
-        File f = new File("admin.txt");
-        if(!f.exists()) return false;
+    public String obtenerRol(String cedula){
+        File f = new File("db_ucv.txt");
         try(Scanner scanner = new Scanner(f)){
             while(scanner.hasNextLine()){
-                if(scanner.nextLine().trim().equals(cedula)){
-                    return true;
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                if(partes.length >= 2){
+                    if(partes[0].trim().equals(cedula)) {
+                        return partes[1].trim().toLowerCase(); 
+                    }
                 }
             }
-        } catch(IOException a) {
+        }catch(IOException a){
             a.printStackTrace();
         }
-        return false;
+         
+        return null; 
     }
    public boolean registrarUsuario(String usuario, String cedula, String contra) {
         try {

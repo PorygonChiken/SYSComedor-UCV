@@ -1,6 +1,4 @@
-chiken;66666666;chikenisgay
-hola;12345678;si
-cityboy;77777777;ok
-siriboi;12345677;pepe
-papupro;87654321;soypro
-skibidi;12312312;toilet;0
+culodesebas;11111111;si;0
+nose;22222222;ci;0
+talvez;33333333;zi;0
+siriboi2;44444444;jeje;0
