@@ -71,6 +71,23 @@ public class menuUtils {
 
         return fila;
     }
+    public static JPanel crearFila(String textoLabel, JComboBox<String> combo) {
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        fila.setBackground(Color.WHITE);
+        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
+        JLabel label = new JLabel(textoLabel);
+        label.setPreferredSize(new Dimension(100, 30));
+        label.setFont(new Font("ARIAL", Font.BOLD, 16));
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+
+        combo.setPreferredSize(new Dimension(200, 30));
+        
+        fila.add(label);
+        fila.add(combo);
+
+        return fila;
+    }
 
     public static JButton crearBoton(String texto) {
         JButton boton = new JButton(texto);

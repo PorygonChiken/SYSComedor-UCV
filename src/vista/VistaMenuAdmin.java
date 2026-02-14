@@ -17,7 +17,7 @@ public class VistaMenuAdmin extends JFrame {
     private JButton btnGuardar;
     private JButton btnVer;
     private JButton btnSalir;
-
+    private JComboBox<String> cmbTipoComida;
     
     public VistaMenuAdmin() {
         menuUtils.configurarFrame(this, "Administración - Comedor UCV", 1000, 720, JFrame.EXIT_ON_CLOSE);
@@ -36,6 +36,8 @@ public class VistaMenuAdmin extends JFrame {
         this.txtCostoFijo = new JTextField();
         this.txtCostoVariable = new JTextField();
         this.txtMerma = new JTextField();
+        this.cmbTipoComida = new JComboBox<>(new String[]{"Desayuno", "Almuerzo"});
+        this.cmbTipoComida.setBackground(Color.WHITE);
 
         menuPanel.add(menuUtils.crearFila("Fecha:", this.txtFecha));
         menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
@@ -56,6 +58,9 @@ public class VistaMenuAdmin extends JFrame {
         
         menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30));
         Dimension dimBoton = new Dimension(300, 40);
+
+        menuPanel.add(menuUtils.crearFila("Tipo:", this.cmbTipoComida));
+        menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
 
         this.btnGuardar = menuUtils.crearBoton("Calcular y Guardar");
         this.btnGuardar.setMaximumSize(dimBoton); 
@@ -83,6 +88,7 @@ public class VistaMenuAdmin extends JFrame {
 
     public String getFecha() { return txtFecha.getText(); }
     public String getTipoPlato() { return txtPlato.getText(); }
+    public String getTipoComida() { return (String) cmbTipoComida.getSelectedItem();}
     public String getCantidad() { return txtRaciones.getText(); }
     public String getCostoFijo() { return txtCostoFijo.getText(); }
     public String getCostoVariable() { return txtCostoVariable.getText(); }

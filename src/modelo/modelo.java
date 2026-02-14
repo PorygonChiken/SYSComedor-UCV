@@ -93,7 +93,7 @@ public class modelo{
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] datos = linea.split("#");
-                if (datos.length >= 4) {
+                if (datos.length >= 5) {
                     String fechaTexto = datos[0].trim();
                     LocalDate fechaMenu;
                     try {
@@ -102,16 +102,17 @@ public class modelo{
                         continue;
                     }
                     if (!fechaMenu.isBefore(inicio) && !fechaMenu.isAfter(hoy)) {
-                        menu.append("• ")
+                        menu.append("• [")
                             //.append(fechaTexto).append(" - ")
-                            .append(datos[1])
+                            .append(datos[1]).append("] ")
+                            .append(datos[2])
                             .append(" ..........................")
                             .append(".......................... ")
-                            .append(datos[3]).append(" Bs")
+                            .append(datos[4]).append(" Bs")
                             .append("\n");
                     }
                 }
-            }
+            }                            
         } catch (Exception e) {
             return "Error leyendo el menú.";
         }
