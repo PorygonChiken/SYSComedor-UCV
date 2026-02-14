@@ -42,6 +42,7 @@ public class ControladorMenuAdmin implements ActionListener {
     private void guardarMenuConCalculo() {
         try {
             String fecha = vista.getFecha();
+            String tipoComida = vista.getTipoComida();
             String tipo = vista.getTipoPlato();
             String cantStr = vista.getCantidad();
             
@@ -61,7 +62,7 @@ public class ControladorMenuAdmin implements ActionListener {
             double mermaDecimal = mermaEntera / 100.0;
             double ccb = calculadora.calcularCCB(cf, cv, raciones, mermaDecimal);
 
-            Menu nuevoMenu = new Menu(fecha, tipo, raciones, ccb);
+            Menu nuevoMenu = new Menu(fecha,tipoComida, tipo, raciones, ccb);
             modelo.guardarMenu(nuevoMenu);
             
             JOptionPane.showMessageDialog(vista, "Calculado y Guardado.\nCosto Bandeja (CCB): " + String.format("%.2f", ccb) + " Bs.");
