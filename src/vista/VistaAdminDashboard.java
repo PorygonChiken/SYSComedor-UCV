@@ -9,13 +9,14 @@ public class VistaAdminDashboard extends JFrame {
 
 
     public JButton btnGestionarMenus;
+    public JButton btnVerificacion;
     public JButton btnCerrarSesion;
 
     public VistaAdminDashboard() {
         menuUtils.configurarFrame(this, "Menú Administrador - Comedor UCV", 1200, 720, JFrame.EXIT_ON_CLOSE);
 
         JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
-        JPanel menuPanel = menuUtils.crearPanelCaja(new Dimension(500, 430));
+        JPanel menuPanel = menuUtils.crearPanelCaja(new Dimension(500, 500));
 
         menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20)); 
 
@@ -25,6 +26,10 @@ public class VistaAdminDashboard extends JFrame {
 
         btnGestionarMenus = menuUtils.crearBoton("Gestionar Menús", new Dimension(300, 40));
         menuPanel.add(btnGestionarMenus);
+        menuPanel.add(Box.createRigidArea(new Dimension(0, 25)));
+
+        btnVerificacion = menuUtils.crearBoton("Verificación Facial", new Dimension(300, 40));
+        menuPanel.add(btnVerificacion);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 200)));
 
         btnCerrarSesion = menuUtils.crearBoton("Cerrar Sesión", new Dimension(300, 40));
@@ -37,7 +42,4 @@ public class VistaAdminDashboard extends JFrame {
         add(panelPrincipal);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new VistaAdminDashboard().setVisible(true));
-    }
 }
