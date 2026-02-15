@@ -88,7 +88,7 @@ public class modelo{
         }
         LocalDate hoy = LocalDate.now();
         LocalDate inicio = hoy.minusDays(6);
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/M/yyyy");
         try (Scanner scanner = new Scanner(f)) {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
