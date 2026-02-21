@@ -53,10 +53,31 @@ public class modelo{
          
         return null; 
     }
+    
+    public String obtenerImagen(String cedula){
+        File f = archivoDb;
+        try(Scanner scanner = new Scanner(f)){
+            while(scanner.hasNextLine()){
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                if(partes.length >= 2 && partes[0].trim().equals(cedula)){
+                    if(partes.length >= 3){
+                        return partes[2].trim();
+                    }
+                    return "default.png"; 
+                }
+            }
+        }catch(IOException a){
+            a.printStackTrace();
+        }
+        return "default.png"; 
+    }
+
    public boolean registrarUsuario(String usuario, String cedula, String contra) {
+        String imagen = obtenerImagen(cedula);
         try {
             FileWriter escribir = new FileWriter(archivoUsuarios, true);
-            escribir.write(usuario + ";" + cedula + ";" + contra + ";0\n");
+            escribir.write(usuario + ";" + cedula + ";" + contra + ";0;" + imagen + "\n");
             escribir.close();
             return true;
         } catch (IOException a) {
@@ -156,7 +177,7 @@ public class modelo{
                             Menu nuevoMenu = new Menu(fechaTexto, tipoComida, tipoPlato, cantidad, costo);
                             listaMenus.add(nuevoMenu);
                         } catch (Exception e) {
-                            // Ignorar lineas mal formadas en numeros
+
                         }
                     }
                 }
@@ -192,11 +213,17 @@ public class modelo{
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] datos = linea.split(";");
-                // usuario;cedula;contra;saldo
                 if (datos.length >= 4 && datos[0].equals(usuario)) {
                     double saldoActual = Double.parseDouble(datos[3]);
                     double nuevoSaldo = saldoActual + monto;
-                    linea = datos[0] + ";" + datos[1] + ";" + datos[2] + ";" + nuevoSaldo;
+                    
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(datos[0]).append(";").append(datos[1]).append(";").append(datos[2]).append(";").append(String.format(java.util.Locale.US, "%.1f", nuevoSaldo));
+                    
+                    for (int i = 4; i < datos.length; i++) {
+                        sb.append(";").append(datos[i]);
+                    }
+                    linea = sb.toString();
                     encontrado = true;
                 }
                 lineas.add(linea);
@@ -220,8 +247,6 @@ public class modelo{
         return false;
     }
     
-    // Método para verificar si el usuario ya reservó un menú específico
-    // Si tipoPlato es null, verifica si existe CUALQUIER reserva para esa fecha/tipoComida
     public boolean reservaExiste(String usuario, String fecha, String tipoComida, String tipoPlato) {
         File f = new File(DATA_DIR, "reserva.txt");
         if (!f.exists()) return false;
@@ -229,7 +254,6 @@ public class modelo{
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 String[] partes = linea.split(";");
-                // Formato: usuario;fecha;tipoComida;tipoPlato;costo
                 if (partes.length >= 4) {
                     boolean usuarioMatch = partes[0].equals(usuario);
                     boolean fechaMatch = partes[1].trim().equals(fecha);
@@ -250,11 +274,9 @@ public class modelo{
         return false;
     }
 
-    // Método para registrar una nueva reserva
     public boolean registrarReserva(String usuario, String fecha, String tipoComida, String tipoPlato, double costo) {
         File f = new File(DATA_DIR, "reserva.txt");
         try (FileWriter writer = new FileWriter(f, true)) {
-            // usuario;fecha;tipoComida;tipoPlato;costo
             writer.write(usuario + ";" + fecha + ";" + tipoComida + ";" + tipoPlato + ";" + costo + "\n");
             return true;
         } catch (IOException e) {
@@ -263,7 +285,6 @@ public class modelo{
         }
     }
 
-    // Método para obtener las reservas de un usuario
     public List<String> obtenerReservasUsuario(String usuario) {
         File f = new File(DATA_DIR, "reserva.txt");
         List<String> reservas = new ArrayList<>();
@@ -274,7 +295,6 @@ public class modelo{
                 String linea = scanner.nextLine();
                 String[] partes = linea.split(";");
                 if (partes.length >= 5 && partes[0].equals(usuario)) {
-                    // Formato output: Fecha - TipoComida: Plato (Costo Bs)
                     reservas.add(partes[1] + " - " + partes[2] + ": " + partes[3] + " (" + partes[4] + " Bs)");
                 }
             }

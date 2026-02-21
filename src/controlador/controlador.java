@@ -98,10 +98,8 @@ public class controlador implements ActionListener{
             }else{
                 this.usuarioActual = usuario;
                 vistaMenu.setUsuario(usuario + " (" + rol + ")");
-                // Versión actualizada para usar List<Menu>
                 List<Menu> menus = this.modelo.obtenerMenusDisponibles();
                 
-                // Actualizar estado de reservas para el usuario actual
                 for (Menu m : menus) {
                     if (this.modelo.reservaExiste(usuario, m.getFecha(), m.getTipoComida(), m.getTipoPlato())) {
                         m.setReservado(true);
@@ -216,8 +214,6 @@ public class controlador implements ActionListener{
             Menu m = (Menu) btn.getClientProperty("menu_data");
             
             if (m != null) {
-                // Verificar si ya existe reserva para ese tipo de comida hoy
-                // Pasamos null en tipoPlato para verificar 'tipo de comida' en general
                 if (this.modelo.reservaExiste(this.usuarioActual, m.getFecha(), m.getTipoComida(), null)) {
                     JOptionPane.showMessageDialog(vistaMenu, 
                         "Ya has realizado una reserva para " + m.getTipoComida() + " en esta fecha.\nSolo se permite una reserva por comida al día.", 
