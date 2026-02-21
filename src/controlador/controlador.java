@@ -14,6 +14,7 @@ public class controlador implements ActionListener{
     private modelo modelo;
     private vistaMenuUsuario vistaMenu; 
     private vistaReg vistaRegi;    
+    private String usuarioActual;
     
     public controlador(){
         this.vista = new vista();
@@ -52,6 +53,9 @@ public class controlador implements ActionListener{
             case "logout":
                 cerrarSesion(); 
                 break;
+            case "recargar":
+                recargarSaldo();
+                break;
         }
     }
 
@@ -84,6 +88,7 @@ public class controlador implements ActionListener{
                 new ControladorDashboard();
                 vista.dispose();
             }else{
+                this.usuarioActual = usuario;
                 vistaMenu.setUsuario(usuario + " (" + rol + ")");
                 String menu = this.modelo.Menu();
                 vistaMenu.setMenu(menu);
@@ -94,6 +99,35 @@ public class controlador implements ActionListener{
             }
         }else{
             JOptionPane.showMessageDialog(vista, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void recargarSaldo() {
+        if (this.usuarioActual == null || this.usuarioActual.isEmpty()) {
+            JOptionPane.showMessageDialog(vistaMenu, "Error: Usuario no identificado", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String input = JOptionPane.showInputDialog(vistaMenu, "Ingrese monto a recargar (Bs):", "Recargar Saldo", JOptionPane.QUESTION_MESSAGE);
+        
+        if (input != null && !input.trim().isEmpty()) {
+            try {
+                double monto = Double.parseDouble(input);
+                if (monto > 0) {
+                    boolean exito = this.modelo.recargarSaldo(this.usuarioActual, monto);
+                    if (exito) {
+                        JOptionPane.showMessageDialog(vistaMenu, "Recarga exitosa!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        String nuevoSaldo = this.modelo.Saldo(this.usuarioActual);
+                        vistaMenu.setMonedero(nuevoSaldo);
+                    } else {
+                        JOptionPane.showMessageDialog(vistaMenu, "Error al recargar saldo.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(vistaMenu, "El monto debe ser positivo.", "Error", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(vistaMenu, "Monto inválido. Ingrese un número.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     private void guardarNuevoUsuario(){
@@ -123,6 +157,7 @@ public class controlador implements ActionListener{
     private void cerrarSesion(){
         int confirm = JOptionPane.showConfirmDialog(vistaMenu, "Desea cerrar sesión?", "Salir", JOptionPane.YES_NO_OPTION);
         if(confirm == JOptionPane.YES_OPTION){
+            this.usuarioActual = null;
             vistaMenu.setVisible(false); 
             vistaMenu.setUsuario("");
             vista.limpiar();             

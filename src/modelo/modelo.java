@@ -138,4 +138,41 @@ public class modelo{
         }
         return "0"; 
     }
+
+    public boolean recargarSaldo(String usuario, double monto) {
+        File f = archivoUsuarios;
+        java.util.List<String> lineas = new java.util.ArrayList<>();
+        boolean encontrado = false;
+        
+        try (Scanner scanner = new Scanner(f)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split(";");
+                // usuario;cedula;contra;saldo
+                if (datos.length >= 4 && datos[0].equals(usuario)) {
+                    double saldoActual = Double.parseDouble(datos[3]);
+                    double nuevoSaldo = saldoActual + monto;
+                    linea = datos[0] + ";" + datos[1] + ";" + datos[2] + ";" + nuevoSaldo;
+                    encontrado = true;
+                }
+                lineas.add(linea);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (encontrado) {
+            try (java.io.FileWriter writer = new java.io.FileWriter(f)) {
+                for (String l : lineas) {
+                    writer.write(l + "\n");
+                }
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
+    }
 }
