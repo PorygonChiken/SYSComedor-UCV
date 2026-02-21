@@ -25,6 +25,10 @@ public class Menu {
         return fecha + "#" + tipoComida + "#" + tipoPlato + "#" + cantidadRaciones + "#" + costoUnitario;
     }
     
+    private boolean reservado = false;
+    public boolean isReservado() { return reservado; }
+    public void setReservado(boolean reservado) { this.reservado = reservado; }
+
     @Override
     public String toString() {
         return "Fecha: " + fecha + "(" + tipoComida + ") | Plato: " + tipoPlato + " | Costo CCB: " + String.format("%.2f", costoUnitario) + " Bs.";

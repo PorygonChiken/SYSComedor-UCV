@@ -1,0 +1,2 @@
+Juan;21/2/2026;Desayuno;Aceituna;524.0
+Juan;21/2/2026;Almuerzo;ABCS;888.0

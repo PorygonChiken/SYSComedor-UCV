@@ -11,11 +11,14 @@ import java.awt.event.ActionListener;
 public class vistaMenuUsuario extends JFrame {
     
     public JButton btnSalir;
+    public JButton btnReservas;
     public JButton btnRecargar;
     private JLabel lblSaludo;
     private JPanel panelDesayunosContenido;
     private JPanel panelAlmuerzosContenido;   
     private JLabel lblTextoMonedero; 
+    private java.util.List<JButton> botonesReserva = new java.util.ArrayList<>();
+    private ActionListener controladorActual;
 
     public vistaMenuUsuario() {
         menuUtils.configurarFrame(this, "Menú Principal", 1200, 720, JFrame.EXIT_ON_CLOSE);
@@ -51,12 +54,25 @@ public class vistaMenuUsuario extends JFrame {
         lblSaludo.setFont(new Font("ARIAL", Font.BOLD, 26));
         header.add(lblSaludo, BorderLayout.WEST);
 
+        JPanel headerButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        headerButtons.setBackground(Color.WHITE);
+
+        btnReservas = new JButton("Mis Reservas");
+        btnReservas.setFont(new Font("ARIAL", Font.BOLD, 14));
+        btnReservas.setBackground(new Color(230, 230, 230));
+        btnReservas.setFocusPainted(false);
+        btnReservas.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         btnSalir = new JButton("Cerrar sesión");
         btnSalir.setFont(new Font("ARIAL", Font.BOLD, 14));
         btnSalir.setBackground(new Color(230, 230, 230));
         btnSalir.setFocusPainted(false);
         btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        header.add(btnSalir, BorderLayout.EAST);
+
+        headerButtons.add(btnReservas);
+        headerButtons.add(btnSalir);
+        
+        header.add(headerButtons, BorderLayout.EAST);
         return header;
     }
 
@@ -174,6 +190,7 @@ public class vistaMenuUsuario extends JFrame {
     public void setMenu(List<Menu> menus) {
         panelDesayunosContenido.removeAll();
         panelAlmuerzosContenido.removeAll();
+        botonesReserva.clear();
         
         for (Menu m : menus) {
             JPanel card = crearTarjeta(m);
@@ -183,6 +200,21 @@ public class vistaMenuUsuario extends JFrame {
             } else {
                 panelAlmuerzosContenido.add(card);
                 panelAlmuerzosContenido.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
+        }
+        
+        if (controladorActual != null) {
+            for (JButton btn : botonesReserva) {
+                boolean hasListener = false;
+                for (ActionListener al : btn.getActionListeners()) {
+                    if (al == controladorActual) {
+                        hasListener = true;
+                        break;
+                    }
+                }
+                if (!hasListener) {
+                    btn.addActionListener(controladorActual);
+                }
             }
         }
         
@@ -238,9 +270,17 @@ public class vistaMenuUsuario extends JFrame {
             btnReservar.setBackground(Color.GRAY);
         }
 
-        btnReservar.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "aun no pije esperate");
-        });
+        if (m.isReservado()) {
+            btnReservar.setEnabled(false);
+            btnReservar.setBackground(Color.GRAY);
+            btnReservar.setText("Reservado");
+        }
+
+        btnReservar.putClientProperty("menu_data", m);
+
+        btnReservar.setActionCommand("reservar_menu");
+
+        botonesReserva.add(btnReservar);
 
         card.add(txtPlato);
         card.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -258,9 +298,18 @@ public class vistaMenuUsuario extends JFrame {
     }
 
     public void setControlador(ActionListener ac) {
+        this.controladorActual = ac;
+        
         btnRecargar.addActionListener(ac);
         btnRecargar.setActionCommand("recargar");
+        btnReservas.addActionListener(ac);
+        btnReservas.setActionCommand("ver_reservas");
         btnSalir.addActionListener(ac);
         btnSalir.setActionCommand("logout");
+        
+
+        for (JButton btn : botonesReserva) {
+            btn.addActionListener(ac);
+        }
     }
 }
