@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 public class vistaMenuUsuario extends JFrame {
     
     public JButton btnSalir;
+    public JButton btnRecargar;
     private JLabel lblSaludo;
     private JTextArea txtTextoMenu;     
     private JLabel lblTextoMonedero; 
@@ -81,9 +82,19 @@ public class vistaMenuUsuario extends JFrame {
         lblTextoMonedero.setFont(new Font("ARIAL", Font.PLAIN, 14));
         lblTextoMonedero.setAlignmentX(Component.CENTER_ALIGNMENT);
         
+        btnRecargar = new JButton("Recargar");
+        btnRecargar.setFont(new Font("ARIAL", Font.BOLD, 14));
+        btnRecargar.setBackground(new Color(230, 230, 230));
+        btnRecargar.setFocusPainted(false);
+        btnRecargar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnRecargar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnRecargar.setMaximumSize(new Dimension(150, 40));
+        
         panelMonedero.add(tituloMonedero);
-        panelMonedero.add(Box.createRigidArea(new Dimension(0, 120)));
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 100)));
         panelMonedero.add(lblTextoMonedero);
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 180)));
+        panelMonedero.add(btnRecargar);
         panelMonedero.add(Box.createVerticalGlue());
 
         JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
@@ -130,6 +141,8 @@ public class vistaMenuUsuario extends JFrame {
     }
 
     public void setControlador(ActionListener ac) {
+        btnRecargar.addActionListener(ac);
+        btnRecargar.setActionCommand("recargar");
         btnSalir.addActionListener(ac);
         btnSalir.setActionCommand("logout");
     }
