@@ -1,9 +1,11 @@
-package controlador;
+ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.List;
 import javax.swing.JOptionPane;
+import modelo.Menu;
 import modelo.modelo;
 import vista.vista;
 import vista.vistaMenuUsuario;
@@ -90,8 +92,9 @@ public class controlador implements ActionListener{
             }else{
                 this.usuarioActual = usuario;
                 vistaMenu.setUsuario(usuario + " (" + rol + ")");
-                String menu = this.modelo.Menu();
-                vistaMenu.setMenu(menu);
+                // Versión actualizada para usar List<Menu>
+                List<Menu> menus = this.modelo.obtenerMenusDisponibles();
+                vistaMenu.setMenu(menus);
                 String saldo = this.modelo.Saldo(usuario);
                 vistaMenu.setMonedero(saldo);
                 vistaMenu.setVisible(true);

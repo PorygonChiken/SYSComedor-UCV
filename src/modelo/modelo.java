@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class modelo{
     private static final String DATA_DIR = "data";
@@ -123,6 +125,48 @@ public class modelo{
 
         return menu.toString();
     }
+    
+    public List<Menu> obtenerMenusDisponibles() {
+        File f = archivoMenus;
+        List<Menu> listaMenus = new ArrayList<>();
+        if (!f.exists()) {
+            return listaMenus;
+        }
+        LocalDate hoy = LocalDate.now();
+        LocalDate inicio = hoy.minusDays(6);
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/M/yyyy");
+        try (Scanner scanner = new Scanner(f)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split("#");
+                if (datos.length >= 5) {
+                    String fechaTexto = datos[0].trim();
+                    LocalDate fechaMenu;
+                    try {
+                        fechaMenu = LocalDate.parse(fechaTexto, formato);
+                    } catch (Exception ex) {
+                        continue;
+                    }
+                    if (!fechaMenu.isBefore(inicio) && !fechaMenu.isAfter(hoy)) {
+                        try {
+                            String tipoComida = datos[1].trim(); 
+                            String tipoPlato = datos[2].trim();
+                            int cantidad = Integer.parseInt(datos[3].trim());
+                            double costo = Double.parseDouble(datos[4].trim());
+                            Menu nuevoMenu = new Menu(fechaTexto, tipoComida, tipoPlato, cantidad, costo);
+                            listaMenus.add(nuevoMenu);
+                        } catch (Exception e) {
+                            // Ignorar lineas mal formadas en numeros
+                        }
+                    }
+                }
+            }                            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaMenus;
+    }
+
     public String Saldo(String saldo) {
         File f = archivoUsuarios;
         try (Scanner scanner = new Scanner(f)) {
