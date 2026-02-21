@@ -219,4 +219,68 @@ public class modelo{
         }
         return false;
     }
+    
+    // Método para verificar si el usuario ya reservó un menú específico
+    // Si tipoPlato es null, verifica si existe CUALQUIER reserva para esa fecha/tipoComida
+    public boolean reservaExiste(String usuario, String fecha, String tipoComida, String tipoPlato) {
+        File f = new File(DATA_DIR, "reserva.txt");
+        if (!f.exists()) return false;
+        try (Scanner scanner = new Scanner(f)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                // Formato: usuario;fecha;tipoComida;tipoPlato;costo
+                if (partes.length >= 4) {
+                    boolean usuarioMatch = partes[0].equals(usuario);
+                    boolean fechaMatch = partes[1].trim().equals(fecha);
+                    boolean tipoComidaMatch = partes[2].trim().equalsIgnoreCase(tipoComida);
+                    
+                    if (usuarioMatch && fechaMatch && tipoComidaMatch) {
+                        if (tipoPlato == null) {
+                            return true; // Existe reserva para este tipo de comida
+                        } else if (partes[3].trim().equals(tipoPlato)) {
+                            return true; // Existe reserva para este plato específico
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Método para registrar una nueva reserva
+    public boolean registrarReserva(String usuario, String fecha, String tipoComida, String tipoPlato, double costo) {
+        File f = new File(DATA_DIR, "reserva.txt");
+        try (FileWriter writer = new FileWriter(f, true)) {
+            // usuario;fecha;tipoComida;tipoPlato;costo
+            writer.write(usuario + ";" + fecha + ";" + tipoComida + ";" + tipoPlato + ";" + costo + "\n");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Método para obtener las reservas de un usuario
+    public List<String> obtenerReservasUsuario(String usuario) {
+        File f = new File(DATA_DIR, "reserva.txt");
+        List<String> reservas = new ArrayList<>();
+        if (!f.exists()) return reservas;
+        
+        try (Scanner scanner = new Scanner(f)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                if (partes.length >= 5 && partes[0].equals(usuario)) {
+                    // Formato output: Fecha - TipoComida: Plato (Costo Bs)
+                    reservas.add(partes[1] + " - " + partes[2] + ": " + partes[3] + " (" + partes[4] + " Bs)");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return reservas;
+    }
 }

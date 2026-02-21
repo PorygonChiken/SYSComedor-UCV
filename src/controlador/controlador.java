@@ -58,6 +58,12 @@ public class controlador implements ActionListener{
             case "recargar":
                 recargarSaldo();
                 break;
+            case "reservar_menu":
+                reservarMenu(a);
+                break;
+            case "ver_reservas":
+                mostrarReservas();
+                break;
         }
     }
 
@@ -94,6 +100,14 @@ public class controlador implements ActionListener{
                 vistaMenu.setUsuario(usuario + " (" + rol + ")");
                 // Versión actualizada para usar List<Menu>
                 List<Menu> menus = this.modelo.obtenerMenusDisponibles();
+                
+                // Actualizar estado de reservas para el usuario actual
+                for (Menu m : menus) {
+                    if (this.modelo.reservaExiste(usuario, m.getFecha(), m.getTipoComida(), m.getTipoPlato())) {
+                        m.setReservado(true);
+                    }
+                }
+                
                 vistaMenu.setMenu(menus);
                 String saldo = this.modelo.Saldo(usuario);
                 vistaMenu.setMonedero(saldo);
@@ -165,6 +179,78 @@ public class controlador implements ActionListener{
             vistaMenu.setUsuario("");
             vista.limpiar();             
             vista.setVisible(true);    
+        }
+    }
+
+    private void mostrarReservas() {
+        if (this.usuarioActual == null) return;
+        
+        List<String> reservas = this.modelo.obtenerReservasUsuario(this.usuarioActual);
+        if (reservas == null || reservas.isEmpty()) {
+            JOptionPane.showMessageDialog(vistaMenu, "No tienes reservas registradas.", "Mis Reservas", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String r : reservas) {
+            sb.append(r).append("\n");
+        }
+        
+        javax.swing.JTextArea textArea = new javax.swing.JTextArea(sb.toString());
+        textArea.setEditable(false);
+        textArea.setOpaque(false);
+        textArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+        
+        javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
+        scrollPane.setPreferredSize(new java.awt.Dimension(400, 300));
+        
+        JOptionPane.showMessageDialog(vistaMenu, scrollPane, "Mis Reservas", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void reservarMenu(ActionEvent e) {
+        if (this.usuarioActual == null) return;
+        
+        Object source = e.getSource();
+        if (source instanceof javax.swing.JButton) {
+            javax.swing.JButton btn = (javax.swing.JButton) source;
+            Menu m = (Menu) btn.getClientProperty("menu_data");
+            
+            if (m != null) {
+                // Verificar si ya existe reserva para ese tipo de comida hoy
+                // Pasamos null en tipoPlato para verificar 'tipo de comida' en general
+                if (this.modelo.reservaExiste(this.usuarioActual, m.getFecha(), m.getTipoComida(), null)) {
+                    JOptionPane.showMessageDialog(vistaMenu, 
+                        "Ya has realizado una reserva para " + m.getTipoComida() + " en esta fecha.\nSolo se permite una reserva por comida al día.", 
+                        "Límite de Reservas", 
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                int confirm = JOptionPane.showConfirmDialog(vistaMenu, 
+                    "¿Desea reservar " + m.getTipoPlato() + " por " + m.getCostoUnitario() + " Bs?",
+                    "Confirmar Reserva",
+                    JOptionPane.YES_NO_OPTION);
+                    
+                if (confirm == JOptionPane.YES_OPTION) {
+                    boolean exito = this.modelo.registrarReserva(
+                        this.usuarioActual, 
+                        m.getFecha(), 
+                        m.getTipoComida(), 
+                        m.getTipoPlato(),
+                        m.getCostoUnitario()
+                    );
+                    
+                    if (exito) {
+                        JOptionPane.showMessageDialog(vistaMenu, "Reserva realizada con éxito!");
+                        m.setReservado(true);
+                        btn.setEnabled(false);
+                        btn.setBackground(java.awt.Color.GRAY);
+                        btn.setText("Reservado");
+                    } else {
+                        JOptionPane.showMessageDialog(vistaMenu, "Error al guardar reserva.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
         }
     }
 }
