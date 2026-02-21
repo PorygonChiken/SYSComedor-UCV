@@ -1,0 +1,20 @@
+import Modelo.ComparadorImagenes;
+
+public class PruebaComparador {
+    public static void main(String[] args) {
+        try {
+            ComparadorImagenes comparador = new ComparadorImagenes("C:\\Users\\Sebastian\\OneDrive\\Documents\\IMG_20251219_101630.jpg");
+            
+            boolean resultado = comparador.compararCon("C:\\Users\\Sebastian\\OneDrive\\Documents\\IMG_20251219_101630.jpg");
+            
+            if (resultado) {
+                System.out.println("Las imágenes son idénticas.");
+            } else {
+                System.out.println("Las imágenes son diferentes.");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error: " + e.getMessage());
+        }
+    }
+}
