@@ -1,10 +1,4 @@
-21/2/2026#Desayuno#Pollo con pupu#10#22.0
-21/2/2026#Desayuno#Aceituna#10#524.0
 21/2/2026#Desayuno#Carakoles con queso#10#524.0
-21/2/2026#Desayuno#Carakoles con semen#10#524.0
 21/2/2026#Desayuno#Carakoles con guijarros extra#10#524.0
 21/2/2026#Almuerzo#Arequipe con petroleo#10#82.0
 21/2/2026#Almuerzo#ABCS#10#888.0
-21/2/2026#Almuerzo#Carambano con leche#10#451.0
-21/2/2026#Almuerzo#Leche de iguana cristalizada con un adereso de miel de gato#10#188.0
-21/2/2026#Almuerzo#Lo de arriba es mentira#10#8.0
