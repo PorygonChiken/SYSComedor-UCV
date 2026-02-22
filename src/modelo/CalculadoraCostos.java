@@ -19,24 +19,28 @@ public class CalculadoraCostos {
         double costosTotales = cf + cv;
         double costoBase = costosTotales / nb;
         double factorMerma = 1.0 + mermaDecimal;
+        double resultado = costoBase * factorMerma;
 
-        return costoBase * factorMerma;
+        return Math.round(resultado * 100.0) / 100.0;
     }
 
 
     public double calcularTarifa(double ccb, TipoUsuario tipo) {
+        double resultado = 0;
         switch (tipo) {
             case ESTUDIANTE:
-                return ccb * TARIFA_ESTUDIANTE;
+                resultado = ccb * TARIFA_ESTUDIANTE;
+                break;
                 
             case PROFESOR:
-                return ccb * TARIFA_PROFESOR;
-                
+                resultado = ccb * TARIFA_PROFESOR;
+                break;
             case EMPLEADO:
-                return ccb * TARIFA_EMPLEADO;
-                
+                resultado = ccb * TARIFA_EMPLEADO;
+                break;
             default:
-                throw new IllegalArgumentException("Tipo de usuario no válido");
+               throw new IllegalArgumentException("Tipo de usuario no válido");
         }
+      return Math.round(resultado * 100.0) / 100.0;
     }
 }

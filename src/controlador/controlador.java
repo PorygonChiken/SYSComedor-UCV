@@ -12,6 +12,7 @@ import modelo.CalculadoraCostos;
 import vista.vista;
 import vista.vistaMenuUsuario;
 import vista.vistaReg;
+import modelo.ModeloEliminarMenu;
 
 public class controlador implements ActionListener{
     private vista vista;
@@ -21,6 +22,8 @@ public class controlador implements ActionListener{
     private String usuarioActual;
     
     public controlador(){
+        ModeloEliminarMenu limpiador = new ModeloEliminarMenu();
+        limpiador.limpiarReservasVencidas();
         this.vista = new vista();
         this.modelo = new modelo();
         this.vistaMenu = new vistaMenuUsuario();
@@ -242,9 +245,9 @@ public class controlador implements ActionListener{
             Menu m = (Menu) btn.getClientProperty("menu_data");
             
             if (m != null) {
-                String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("d/M/yyyy"));
+                String fechaMenu = m.getFecha();
                 
-                if (this.modelo.reservaExiste(this.usuarioActual, fechaHoy, m.getTipoComida(), null)) {
+                if (this.modelo.reservaExiste(this.usuarioActual, fechaMenu, m.getTipoComida(), null)) {
                     JOptionPane.showMessageDialog(vistaMenu, 
                         "Ya has realizado una reserva para " + m.getTipoComida() + " en esta fecha.\nSolo se permite una reserva por comida al día.", 
                         "Límite de Reservas", 
@@ -260,7 +263,7 @@ public class controlador implements ActionListener{
                 if (confirm == JOptionPane.YES_OPTION) {
                     boolean exito = this.modelo.registrarReserva(
                         this.usuarioActual, 
-                        fechaHoy,
+                        fechaMenu,
                         m.getTipoComida(), 
                         m.getTipoPlato(),
                         m.getCostoUnitario()

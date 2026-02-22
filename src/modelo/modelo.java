@@ -274,17 +274,47 @@ public class modelo{
         return false;
     }
 
-    public boolean registrarReserva(String usuario, String fecha, String tipoComida, String tipoPlato, double costo) {
+public boolean registrarReserva(String usuario, String fecha, String tipoComida, String tipoPlato, double costo) {
+        java.util.List<String> lineasMenu = new java.util.ArrayList<>();
+        boolean menuActualizado = false;
+        
+        try (Scanner scanner = new Scanner(archivoMenus)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split("#");
+                
+                if (!menuActualizado && datos.length >= 5 && datos[0].trim().equals(fecha.trim()) 
+                && datos[1].trim().equalsIgnoreCase(tipoComida.trim()) && 
+                 datos[2].trim().equalsIgnoreCase(tipoPlato.trim()))  {
+                    int raciones = Integer.parseInt(datos[3]);
+                    
+                    if (raciones > 0) {
+                        raciones--; 
+                        linea = datos[0] + "#" + datos[1] + "#" + datos[2] + "#" + raciones + "#" + datos[4];
+                        menuActualizado = true;
+                    } else {
+                        return false; 
+                    }
+                }
+                lineasMenu.add(linea); 
+            }
+        } catch (Exception e) { return false; }       
+        if (!menuActualizado) return false; 
+        try (FileWriter writer = new FileWriter(archivoMenus, false)) {
+            for (String l : lineasMenu) writer.write(l + "\n");
+        } catch (IOException e) { return false; }
+        String fechaHoy = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("d/M/yyyy"));
+
         File f = new File(DATA_DIR, "reserva.txt");
         try (FileWriter writer = new FileWriter(f, true)) {
-            writer.write(usuario + ";" + fecha + ";" + tipoComida + ";" + tipoPlato + ";" + costo + "\n");
+            writer.write(usuario + ";" + fechaHoy + ";" + tipoComida + ";" + tipoPlato + ";" + costo + "\n");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
-
+    
     public List<String> obtenerReservasUsuario(String usuario) {
         File f = new File(DATA_DIR, "reserva.txt");
         List<String> reservas = new ArrayList<>();
@@ -303,4 +333,83 @@ public class modelo{
         }
         return reservas;
     }
+
+public String procesarAccesoFacial(String usuario) {
+        File fReserva = new File(DATA_DIR, "reserva.txt");
+        if (!fReserva.exists()) return "No tienes reservas activas.";
+
+        java.util.List<String> lineasRestantes = new java.util.ArrayList<>();
+        double costoTotal = 0;
+        int reservasEncontradas = 0;
+
+        try (Scanner scanner = new Scanner(fReserva)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+
+                if (partes.length >= 5 && partes[0].equals(usuario)) {
+                    costoTotal += Double.parseDouble(partes[4]);
+                    reservasEncontradas++;
+                } else {
+                    lineasRestantes.add(linea); 
+                }
+            }
+        } catch (IOException e) { return "Error al leer reservas."; }
+
+        if (reservasEncontradas == 0) return "No tienes reservas activas para cobrar.";
+
+        double saldoActual = Double.parseDouble(Saldo(usuario)); 
+        if (saldoActual < costoTotal) {
+            return "Saldo insuficiente.\nNecesitas " + costoTotal + " Bs ";
+        }
+
+        recargarSaldo(usuario, -costoTotal);
+
+        try (FileWriter writer = new FileWriter(fReserva, false)) {
+            for (String l : lineasRestantes) {
+                writer.write(l + "\n");
+            }
+        } catch (IOException e) { return "Error al borrar las reservas cobradas."; }
+
+        return "Acceso concedido.\nSe cobraron " + costoTotal + " Bs por " + reservasEncontradas + " plato(s).\nTu nuevo saldo es: " + (saldoActual - costoTotal) + " Bs.";
+    }
+  
+    public void limpiarReservasVencidas() {
+        File fReserva = new File(DATA_DIR, "reserva.txt");
+        if (!fReserva.exists()) return;
+
+        java.util.List<String> lineasValidas = new java.util.ArrayList<>();
+        LocalDate hoy = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/M/yyyy");
+        boolean modificado = false;
+
+        try (Scanner scanner = new Scanner(fReserva)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                
+                if (partes.length >= 5) {
+                    try {
+                        LocalDate fechaReserva = LocalDate.parse(partes[1].trim(), formato);
+                        if (fechaReserva.isBefore(hoy)) {
+                            modificado = true; 
+                        } else {
+                            lineasValidas.add(linea);
+                        }
+                    } catch (Exception e) {
+                        lineasValidas.add(linea); 
+                    }
+                } else {
+                    lineasValidas.add(linea);
+                }
+            }
+        } catch (Exception e) { return; }
+        if (modificado) {
+            try (FileWriter writer = new FileWriter(fReserva, false)) {
+                for (String l : lineasValidas) writer.write(l + "\n");
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+
+   
 }

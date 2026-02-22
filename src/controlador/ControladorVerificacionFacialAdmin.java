@@ -88,12 +88,17 @@ public class ControladorVerificacionFacialAdmin implements ActionListener {
                 try (Scanner scanner = new Scanner(archivoUsuarios)) {
                     while (scanner.hasNextLine()) {
                         String[] datos = scanner.nextLine().split(";");
-                        
-                        if (datos.length >= 5 && datos[4].trim().equals(nombreAsociado)) {
-                            JOptionPane.showMessageDialog(vista, "Verificación completada. Hola " + datos[0]);
-                            usuarioEncontrado = true;
-                            break;
-                        }
+
+                             if (datos.length >= 5 && datos[4].trim().equals(nombreAsociado)) {
+                             String nombreUsuario = datos[0]; 
+                               modelo.modelo miModelo = new modelo.modelo(); 
+                               String resultadoCobro = miModelo.procesarAccesoFacial(nombreUsuario);
+    
+                               
+                              JOptionPane.showMessageDialog(vista, "Verificación Facial: Hola " + nombreUsuario + "\n\n" + resultadoCobro);
+                              usuarioEncontrado = true;
+                               break;
+                              }
                     }
                 }
                 

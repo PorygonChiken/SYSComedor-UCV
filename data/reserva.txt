@@ -1,5 +1,1 @@
-Juan;21/2/2026;Desayuno;Aceituna;524.0
-Juan;21/2/2026;Almuerzo;ABCS;888.0
-Judy Hopps;21/2/2026;Almuerzo;Leche de iguana cristalizada con un adereso de miel de gato;169.20000000000002
-Judy Hopps;22/2/2026;Almuerzo;ABCS;799.2
-Alejandro;22/2/2026;Almuerzo;ABCS;266.4
+
