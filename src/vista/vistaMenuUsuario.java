@@ -36,10 +36,18 @@ public class vistaMenuUsuario extends JFrame {
     }
     
     private JPanel crearPanel() {
-        JPanel contenedor = new JPanel(new BorderLayout(0, 20));
-        contenedor.setBackground(Color.WHITE);
+        JPanel contenedor = new JPanel(new BorderLayout(0, 20)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+                super.paintComponent(g);
+            }
+        };
+        contenedor.setOpaque(false);
+        contenedor.setBackground(menuUtils.BLANCO_TRANSLUCIDO);
         contenedor.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.BLACK, 2),
+            BorderFactory.createEmptyBorder(20, 20, 20, 20),
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
         contenedor.setPreferredSize(new Dimension(900, 500));
@@ -48,26 +56,22 @@ public class vistaMenuUsuario extends JFrame {
 
     private JPanel crearHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Color.WHITE);
+        header.setOpaque(false);
         
         lblSaludo = new JLabel("Buenos días usuario");
         lblSaludo.setFont(new Font("ARIAL", Font.BOLD, 26));
         header.add(lblSaludo, BorderLayout.WEST);
 
         JPanel headerButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        headerButtons.setBackground(Color.WHITE);
+        headerButtons.setOpaque(false);
 
-        btnReservas = new JButton("Mis Reservas");
+        btnReservas = menuUtils.crearBoton("Mis Reservas");
         btnReservas.setFont(new Font("ARIAL", Font.BOLD, 14));
         btnReservas.setBackground(new Color(230, 230, 230));
-        btnReservas.setFocusPainted(false);
-        btnReservas.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btnSalir = new JButton("Cerrar sesión");
+        btnSalir = menuUtils.crearBoton("Cerrar sesión");
         btnSalir.setFont(new Font("ARIAL", Font.BOLD, 14));
-        btnSalir.setBackground(new Color(230, 230, 230));
-        btnSalir.setFocusPainted(false);
-        btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnSalir.setBackground(new Color(255, 100, 100));
 
         headerButtons.add(btnReservas);
         headerButtons.add(btnSalir);
@@ -78,21 +82,21 @@ public class vistaMenuUsuario extends JFrame {
 
     private JPanel crearBody() {
         JPanel bodyContent = new JPanel();
-        bodyContent.setBackground(Color.WHITE);
+        bodyContent.setOpaque(false);
         bodyContent.setLayout(new BoxLayout(bodyContent, BoxLayout.X_AXIS));
 
         //menu
         JPanel panelMenu = new JPanel(new GridLayout(1, 2, 10, 0));
-        panelMenu.setBackground(Color.WHITE);
+        panelMenu.setOpaque(false);
         panelMenu.setPreferredSize(new Dimension(560, 380));
         
         panelDesayunosContenido = new JPanel();
         panelDesayunosContenido.setLayout(new BoxLayout(panelDesayunosContenido, BoxLayout.Y_AXIS));
-        panelDesayunosContenido.setBackground(Color.WHITE);
+        panelDesayunosContenido.setOpaque(false);
         
         panelAlmuerzosContenido = new JPanel();
         panelAlmuerzosContenido.setLayout(new BoxLayout(panelAlmuerzosContenido, BoxLayout.Y_AXIS));
-        panelAlmuerzosContenido.setBackground(Color.WHITE);
+        panelAlmuerzosContenido.setOpaque(false);
 
         panelMenu.add(crearMenu("Desayuno", panelDesayunosContenido));
         panelMenu.add(crearMenu("Almuerzo", panelAlmuerzosContenido));
@@ -113,7 +117,7 @@ public class vistaMenuUsuario extends JFrame {
         bodyContent.add(monederoWrapper);
 
         JPanel finalBody = new JPanel();
-        finalBody.setBackground(Color.WHITE);
+        finalBody.setOpaque(false);
         finalBody.setLayout(new BoxLayout(finalBody, BoxLayout.Y_AXIS));
         
         JSeparator topLine = new JSeparator(SwingConstants.HORIZONTAL);
@@ -128,7 +132,7 @@ public class vistaMenuUsuario extends JFrame {
 
     private JPanel crearMenu(String title, JPanel contentPanel) {
         JPanel col = new JPanel(new BorderLayout());
-        col.setBackground(Color.WHITE);
+        col.setOpaque(false);
 
         JLabel titulo = new JLabel(title);
         titulo.setFont(new Font("ARIAL", Font.BOLD, 18));
@@ -138,7 +142,8 @@ public class vistaMenuUsuario extends JFrame {
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
-        scroll.getViewport().setBackground(Color.WHITE);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
@@ -149,7 +154,7 @@ public class vistaMenuUsuario extends JFrame {
 
     private JPanel crearPanelMonedero() {
         JPanel panelMonedero = new JPanel();
-        panelMonedero.setBackground(Color.WHITE);
+        panelMonedero.setOpaque(false);
         panelMonedero.setLayout(new BoxLayout(panelMonedero, BoxLayout.Y_AXIS));
         
         JLabel tituloMonedero = new JLabel("Monedero");
@@ -160,23 +165,20 @@ public class vistaMenuUsuario extends JFrame {
         lblTextoMonedero.setFont(new Font("ARIAL", Font.PLAIN, 14));
         lblTextoMonedero.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        btnRecargar = new JButton("Recargar");
+        btnRecargar = menuUtils.crearBoton("Recargar");
         btnRecargar.setFont(new Font("ARIAL", Font.BOLD, 14));
         btnRecargar.setBackground(new Color(230, 230, 230));
-        btnRecargar.setFocusPainted(false);
-        btnRecargar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnRecargar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnRecargar.setMaximumSize(new Dimension(150, 40));
         
         panelMonedero.add(tituloMonedero);
         panelMonedero.add(Box.createRigidArea(new Dimension(0, 100)));
         panelMonedero.add(lblTextoMonedero);
-        panelMonedero.add(Box.createRigidArea(new Dimension(0, 180)));
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 140)));
         panelMonedero.add(btnRecargar);
         panelMonedero.add(Box.createVerticalGlue());
         
         JPanel monederoWrapper = new JPanel(new BorderLayout());
-        monederoWrapper.setBackground(Color.WHITE);
+        monederoWrapper.setOpaque(false);
         monederoWrapper.setPreferredSize(new Dimension(240, 380));
         monederoWrapper.add(panelMonedero, BorderLayout.CENTER);
         
@@ -225,11 +227,19 @@ public class vistaMenuUsuario extends JFrame {
     }
     
     private JPanel crearTarjeta(Menu m) {
-        JPanel card = new JPanel();
+        JPanel card = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                super.paintComponent(g);
+            }
+        };
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBackground(new Color(245, 245, 245));
+        card.setBackground(new Color(255, 255, 255, 150));
+        card.setOpaque(false);
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -257,12 +267,10 @@ public class vistaMenuUsuario extends JFrame {
         lblEstado.setForeground(colorEstado);
         lblEstado.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton btnReservar = new JButton("Reservar");
+        JButton btnReservar = menuUtils.crearBoton("Reservar");
         btnReservar.setFont(new Font("ARIAL", Font.BOLD, 11));
         btnReservar.setBackground(new Color(100, 200, 100)); // Green
         btnReservar.setForeground(Color.WHITE);
-        btnReservar.setFocusPainted(false);
-        btnReservar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnReservar.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         if (!disponible) {
@@ -296,7 +304,7 @@ public class vistaMenuUsuario extends JFrame {
         javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.GridLayout(0, 1));
         javax.swing.JTextField montoField = new javax.swing.JTextField();
         javax.swing.JTextField refField = new javax.swing.JTextField();
-        
+
         panel.add(new javax.swing.JLabel("Monto a recargar:"));
         panel.add(montoField);
         panel.add(new javax.swing.JLabel("Ultimos 4 digitos de la referencia:"));
