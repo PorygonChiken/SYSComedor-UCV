@@ -15,7 +15,6 @@ public class VistaMenuAdmin extends JFrame {
     private JTextField txtCostoVariable;
     private JTextField txtMerma;
     private JButton btnGuardar;
-    private JButton btnVer;
     private JButton btnSalir;
     private JComboBox<String> cmbTipoComida;
     
@@ -68,11 +67,6 @@ public class VistaMenuAdmin extends JFrame {
         menuPanel.add(this.btnGuardar);
         
         menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_10));
-
-        this.btnVer = menuUtils.crearBoton("Ver Menús");
-        this.btnVer.setMaximumSize(dimBoton);
-        this.btnVer.setBackground(new Color(220, 235, 245));
-        menuPanel.add(this.btnVer);
         
         menuPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20));
 
@@ -114,9 +108,6 @@ public class VistaMenuAdmin extends JFrame {
     public void setControlador(ActionListener c) {
         btnGuardar.addActionListener(c);
         btnGuardar.setActionCommand("GUARDAR");
-        
-        btnVer.addActionListener(c);
-        btnVer.setActionCommand("VER");
         
         btnSalir.addActionListener(c);
         btnSalir.setActionCommand("SALIR");

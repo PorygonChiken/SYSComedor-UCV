@@ -30,9 +30,6 @@ public class ControladorMenuAdmin implements ActionListener {
             case "GUARDAR":
                 guardarMenuConCalculo();
                 break;
-            case "VER":
-                mostrarMenus();
-                break;
             case "SALIR":
                 salirdelmenu();
                 break;

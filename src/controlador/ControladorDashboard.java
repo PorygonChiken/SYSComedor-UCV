@@ -8,7 +8,6 @@ public class ControladorDashboard implements ActionListener {
 
     private VistaAdminDashboard vista;
 
-    // Constructor vacío
     public ControladorDashboard() {
         this.vista = new VistaAdminDashboard(); 
         
