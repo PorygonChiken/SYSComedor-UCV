@@ -292,6 +292,42 @@ public class vistaMenuUsuario extends JFrame {
         return card;
     }
 
+    public String[] solicitarDatosRecarga() {
+        javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.GridLayout(0, 1));
+        javax.swing.JTextField montoField = new javax.swing.JTextField();
+        javax.swing.JTextField refField = new javax.swing.JTextField();
+        
+        panel.add(new javax.swing.JLabel("Monto a recargar:"));
+        panel.add(montoField);
+        panel.add(new javax.swing.JLabel("Ultimos 4 digitos de la referencia:"));
+        panel.add(refField);
+
+        while (true) {
+            int result = JOptionPane.showConfirmDialog(this, panel, "Recargar Saldo",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            
+            if (result != JOptionPane.OK_OPTION) {
+                return null;
+            }
+
+            String montoStr = montoField.getText();
+            String refStr = refField.getText();
+
+            if (montoStr.trim().isEmpty() || refStr.trim().isEmpty()) {
+                 JOptionPane.showMessageDialog(this, "Rellena todos los campos", "Error", JOptionPane.WARNING_MESSAGE);
+                 continue;
+            }
+
+            if (!refStr.matches("\\d{4}")) {
+                JOptionPane.showMessageDialog(this, "Solo 4 dígitos", "Error", JOptionPane.WARNING_MESSAGE);
+                continue;
+            }
+
+            return new String[] {montoStr, refStr};
+        }
+    }
+
+
     public void setMonedero(String saldo) {
         lblTextoMonedero.setText(saldo + " Bs");
         lblTextoMonedero.setFont(new Font("ARIAL", Font.BOLD, 42));
