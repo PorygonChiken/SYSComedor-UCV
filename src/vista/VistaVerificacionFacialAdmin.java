@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 
 public class VistaVerificacionFacialAdmin extends JFrame {
 
-    // Ahora son privados para obligar a usar el controlador
     private JButton btnSubirImagen;
     private JButton btnVerificar;
     private JButton btnVolver;
@@ -67,5 +66,9 @@ public class VistaVerificacionFacialAdmin extends JFrame {
 
         btnVolver.addActionListener(c);
         btnVolver.setActionCommand("VOLVER");       
+    }
+  
+    public void setPrevisualizacionTexto(String texto) {
+        lblPrevisualizacion.setText(texto);
     }
 }

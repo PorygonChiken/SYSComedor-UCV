@@ -1,13 +1,19 @@
 package controlador;
 
+import modelo.ComparadorImagenes;
 import vista.VistaVerificacionFacialAdmin;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class ControladorVerificacionFacialAdmin implements ActionListener {
 
     private VistaVerificacionFacialAdmin vista;
+    private String rutaImagenActual = null; 
 
     public ControladorVerificacionFacialAdmin() {
         this.vista = new VistaVerificacionFacialAdmin();
@@ -33,11 +39,75 @@ public class ControladorVerificacionFacialAdmin implements ActionListener {
     }
 
     private void procesarSubidaImagen() {
-        JOptionPane.showMessageDialog(vista, "Funcionalidad de subir imagen pendiente.");
+        JFileChooser chooser = new JFileChooser();
+        int seleccion = chooser.showOpenDialog(vista);
+        
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = chooser.getSelectedFile();
+            rutaImagenActual = archivoSeleccionado.getAbsolutePath();
+            
+            vista.setPrevisualizacionTexto(archivoSeleccionado.getName());
+        }
     }
 
     private void procesarVerificacion() {
-        JOptionPane.showMessageDialog(vista, "Funcionalidad de verificación pendiente.");
+      
+        if (rutaImagenActual == null) {
+            JOptionPane.showMessageDialog(vista, "Por favor, suba una imagen primero.");
+            return;
+        }
+
+        try {
+            ComparadorImagenes comparador = new ComparadorImagenes(rutaImagenActual);
+            File carpetaImg = new File("data/img");
+            
+            if (!carpetaImg.exists() || !carpetaImg.isDirectory()) {
+                JOptionPane.showMessageDialog(vista, "Error: La carpeta 'data/img' no existe.");
+                return;
+            }
+
+            File[] archivosEnCarpeta = carpetaImg.listFiles();
+            String nombreAsociado = null;
+
+            if (archivosEnCarpeta != null) {
+                for (File imgGuardada : archivosEnCarpeta) {
+                    if (imgGuardada.isFile() && comparador.compararCon(imgGuardada.getAbsolutePath())) {
+                        
+                        String nombreCompleto = imgGuardada.getName();
+                        int indicePunto = nombreCompleto.lastIndexOf('.');
+                        nombreAsociado = (indicePunto == -1) ? nombreCompleto : nombreCompleto.substring(0, indicePunto);
+                        break; 
+                    }
+                }
+            }
+
+            if (nombreAsociado != null) {
+                File archivoUsuarios = new File("data/usuarios.txt");
+                boolean usuarioEncontrado = false;
+                
+                try (Scanner scanner = new Scanner(archivoUsuarios)) {
+                    while (scanner.hasNextLine()) {
+                        String[] datos = scanner.nextLine().split(";");
+                        
+                        if (datos.length >= 5 && datos[4].trim().equals(nombreAsociado)) {
+                            JOptionPane.showMessageDialog(vista, "Verificación completada. Hola " + datos[0]);
+                            usuarioEncontrado = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!usuarioEncontrado) {
+                    JOptionPane.showMessageDialog(vista, "Imagen reconocida , pero no tiene usuario asignado en usuarios.txt.");
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(vista, "Acceso Denegado: La imagen no coincide con nuestra base de datos.");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(vista, "Error durante la verificación: " + ex.getMessage());
+        }
     }
 
     private void volverAlDashboard() {
