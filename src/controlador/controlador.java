@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Menu;
 import modelo.modelo;
+import modelo.CalculadoraCostos;
 import vista.vista;
 import vista.vistaMenuUsuario;
 import vista.vistaReg;
@@ -99,13 +100,33 @@ public class controlador implements ActionListener{
                 this.usuarioActual = usuario;
                 vistaMenu.setUsuario(usuario + " (" + rol + ")");
                 List<Menu> menus = this.modelo.obtenerMenusDisponibles();
-                
-                for (Menu m : menus) {
-                    if (this.modelo.reservaExiste(usuario, m.getFecha(), m.getTipoComida(), m.getTipoPlato())) {
+        
+                CalculadoraCostos calc = new CalculadoraCostos();
+                CalculadoraCostos.TipoUsuario tipoEnum = null;
+                switch(rol) {
+                    case "estudiante": 
+                        tipoEnum = CalculadoraCostos.TipoUsuario.ESTUDIANTE; 
+                        break;
+                    case "profesor": 
+                        tipoEnum = CalculadoraCostos.TipoUsuario.PROFESOR; 
+                        break;
+                    case "empleado": 
+                        tipoEnum = CalculadoraCostos.TipoUsuario.EMPLEADO; 
+                        break;
+                }
+
+                if(tipoEnum != null) {
+
+                    for(Menu m : menus){
+                        double precioFinal = calc.calcularTarifa(m.getCostoUnitario(), tipoEnum);
+                        m.setCostoUnitario(precioFinal);
+                    }
+                }
+                for(Menu m : menus){
+                    if(this.modelo.reservaExiste(usuario, m.getFecha(), m.getTipoComida(), m.getTipoPlato())){
                         m.setReservado(true);
                     }
                 }
-                
                 vistaMenu.setMenu(menus);
                 String saldo = this.modelo.Saldo(usuario);
                 vistaMenu.setMonedero(saldo);

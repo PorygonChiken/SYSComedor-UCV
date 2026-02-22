@@ -21,6 +21,8 @@ public class Menu {
     public int getCantidadRaciones() { return cantidadRaciones; }
     public double getCostoUnitario() { return costoUnitario; }
 
+    public void setCostoUnitario(double costoUnitario) { this.costoUnitario = costoUnitario; }
+
     public String toTXT() {
         return fecha + "#" + tipoComida + "#" + tipoPlato + "#" + cantidadRaciones + "#" + costoUnitario;
     }

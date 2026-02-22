@@ -3,3 +3,4 @@ Alejandro;33333333;333;5200
 Sebastian;44444444;444;1
 Mauricio;55555555;555;5000
 Juan;22222222;222;621.0;test
+Judy Hopps;66666666;666;0;default.png
