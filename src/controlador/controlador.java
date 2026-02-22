@@ -1,8 +1,9 @@
- package controlador;
+package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Menu;
@@ -116,17 +117,20 @@ public class controlador implements ActionListener{
                 }
 
                 if(tipoEnum != null) {
-
                     for(Menu m : menus){
                         double precioFinal = calc.calcularTarifa(m.getCostoUnitario(), tipoEnum);
                         m.setCostoUnitario(precioFinal);
                     }
                 }
+                
+                String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("d/M/yyyy"));
+                
                 for(Menu m : menus){
-                    if(this.modelo.reservaExiste(usuario, m.getFecha(), m.getTipoComida(), m.getTipoPlato())){
+                    if(this.modelo.reservaExiste(usuario, fechaHoy, m.getTipoComida(), m.getTipoPlato())){
                         m.setReservado(true);
                     }
                 }
+           
                 vistaMenu.setMenu(menus);
                 String saldo = this.modelo.Saldo(usuario);
                 vistaMenu.setMonedero(saldo);
@@ -166,6 +170,7 @@ public class controlador implements ActionListener{
             }
         }
     }
+    
     private void guardarNuevoUsuario(){
         String user = vistaRegi.getUsuario(); 
         String cedula = vistaRegi.getCedula();
@@ -235,7 +240,9 @@ public class controlador implements ActionListener{
             Menu m = (Menu) btn.getClientProperty("menu_data");
             
             if (m != null) {
-                if (this.modelo.reservaExiste(this.usuarioActual, m.getFecha(), m.getTipoComida(), null)) {
+                String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("d/M/yyyy"));
+                
+                if (this.modelo.reservaExiste(this.usuarioActual, fechaHoy, m.getTipoComida(), null)) {
                     JOptionPane.showMessageDialog(vistaMenu, 
                         "Ya has realizado una reserva para " + m.getTipoComida() + " en esta fecha.\nSolo se permite una reserva por comida al día.", 
                         "Límite de Reservas", 
@@ -251,12 +258,12 @@ public class controlador implements ActionListener{
                 if (confirm == JOptionPane.YES_OPTION) {
                     boolean exito = this.modelo.registrarReserva(
                         this.usuarioActual, 
-                        m.getFecha(), 
+                        fechaHoy,
                         m.getTipoComida(), 
                         m.getTipoPlato(),
                         m.getCostoUnitario()
                     );
-                    
+                
                     if (exito) {
                         JOptionPane.showMessageDialog(vistaMenu, "Reserva realizada con éxito!");
                         m.setReservado(true);
