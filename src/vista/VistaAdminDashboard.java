@@ -8,7 +8,6 @@ import java.awt.*;
 public class VistaAdminDashboard extends JFrame {
 
     public JButton btnGestionarMenus;
-    public JButton btnVerificacion;
     public JButton btnVerMenus; 
     public JButton btnCerrarSesion;
 
@@ -27,10 +26,6 @@ public class VistaAdminDashboard extends JFrame {
         btnGestionarMenus = menuUtils.crearBoton("Gestionar Menús", new Dimension(300, 40));
         menuPanel.add(btnGestionarMenus);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 25)));
-
-        btnVerificacion = menuUtils.crearBoton("Verificación Facial", new Dimension(300, 40));
-        menuPanel.add(btnVerificacion);
-        menuPanel.add(Box.createRigidArea(new Dimension(0, 25))); 
 
         btnVerMenus = menuUtils.crearBoton("Ver Menús", new Dimension(300, 40));
         menuPanel.add(btnVerMenus);

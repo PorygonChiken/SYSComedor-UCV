@@ -12,7 +12,6 @@ public class ControladorDashboard implements ActionListener {
         this.vista = new VistaAdminDashboard(); 
         
         this.vista.btnGestionarMenus.addActionListener(this);
-        this.vista.btnVerificacion.addActionListener(this);
         this.vista.btnVerMenus.addActionListener(this); 
         this.vista.btnCerrarSesion.addActionListener(this);
      
@@ -25,10 +24,6 @@ public class ControladorDashboard implements ActionListener {
             vista.dispose(); 
             new ControladorMenuAdmin(); 
         } 
-        else if (e.getSource() == vista.btnVerificacion) { 
-            vista.dispose();
-            new ControladorVerificacionFacialAdmin(); 
-        }
         else if (e.getSource() == vista.btnVerMenus) {
             vista.dispose();
             new ControladorEliminarMenu(); 

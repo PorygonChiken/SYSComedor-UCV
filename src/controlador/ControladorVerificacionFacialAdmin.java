@@ -33,7 +33,7 @@ public class ControladorVerificacionFacialAdmin implements ActionListener {
                 break;
                 
             case "VOLVER":
-                volverAlDashboard();
+                CerrarCajero();
                 break;
         }
     }
@@ -115,8 +115,15 @@ public class ControladorVerificacionFacialAdmin implements ActionListener {
         }
     }
 
-    private void volverAlDashboard() {
-        vista.dispose();
-        new ControladorDashboard();
+  private void CerrarCajero() {
+        int confirm = JOptionPane.showConfirmDialog(vista, 
+            "¿Desea apagar el sistema de verificación?", 
+            "Apagar Cajero", 
+            JOptionPane.YES_NO_OPTION);
+            
+        if (confirm == JOptionPane.YES_OPTION) {
+            vista.dispose();
+            System.exit(0); 
+        }
     }
 }
