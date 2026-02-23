@@ -85,7 +85,7 @@ public class ModeloEliminarMenu {
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/M/yyyy");
         boolean modificado = false;
-
+        
         try (Scanner scanner = new Scanner(archivoReservas)) {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
@@ -96,6 +96,7 @@ public class ModeloEliminarMenu {
                         LocalDate fechaReserva = LocalDate.parse(partes[1].trim(), formato);
                         if (fechaReserva.isBefore(hoy)) {
                             modificado = true; 
+                            devolverRacionMenu(partes[2], partes[3]);                           
                         } else {
                             lineasValidas.add(linea);
                         }
@@ -111,6 +112,36 @@ public class ModeloEliminarMenu {
         if (modificado) {
             try (FileWriter writer = new FileWriter(archivoReservas, false)) {
                 for (String l : lineasValidas) writer.write(l + "\n");
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+    private void devolverRacionMenu(String tipoComida, String tipoPlato) {
+        if (!archivoMenus.exists()) return;
+        List<String> lineasMenu = new ArrayList<>();
+        boolean actualizado = false;
+
+        try (Scanner scanner = new Scanner(archivoMenus)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split("#");
+                
+                if (!actualizado && datos.length >= 5 && 
+                    datos[1].trim().equalsIgnoreCase(tipoComida.trim()) && 
+                    datos[2].trim().equalsIgnoreCase(tipoPlato.trim())) {
+                    
+                    int raciones = Integer.parseInt(datos[3].trim());
+                    raciones++; 
+                    
+                    linea = datos[0] + "#" + datos[1] + "#" + datos[2] + "#" + raciones + "#" + datos[4];
+                    actualizado = true; 
+                }
+                lineasMenu.add(linea);
+            }
+        } catch (Exception e) { return; }
+
+        if (actualizado) {
+            try (FileWriter writer = new FileWriter(archivoMenus, false)) {
+                for (String l : lineasMenu) writer.write(l + "\n");
             } catch (IOException e) { e.printStackTrace(); }
         }
     }
