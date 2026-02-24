@@ -4,3 +4,4 @@ Sebastian;44444444;444;1
 Mauricio;55555555;555;5000
 Juan;22222222;222;621.4;test
 Judy Hopps;66666666;666;0;default.png
+AAA_TestUser;88888888;clave123;500.0;default.png

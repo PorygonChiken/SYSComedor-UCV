@@ -155,8 +155,7 @@ public class controlador implements ActionListener{
         if (datos == null) return;
 
         String montoStr = datos[0];
-        String refStr = datos[1];
-
+    
         try {
             double monto = Double.parseDouble(montoStr);
             if (monto > 0) {
