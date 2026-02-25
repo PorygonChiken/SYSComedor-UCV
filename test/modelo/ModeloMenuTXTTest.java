@@ -1,6 +1,6 @@
-import org.junit.Test;
+package modelo;
 
-import modelo.ModeloMenuTXT;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
