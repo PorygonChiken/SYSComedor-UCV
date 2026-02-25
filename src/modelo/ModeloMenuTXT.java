@@ -14,4 +14,22 @@ public class ModeloMenuTXT {
         }
     }
 
+    public double procesarYGuardarMenu(String fecha, String tipoComida, String tipoPlato, 
+                                       String cantStr, String cfStr, String cvStr, String mermaStr) 
+                                       throws NumberFormatException, IllegalArgumentException {
+
+        int raciones = Integer.parseInt(cantStr); 
+        double cf = Double.parseDouble(cfStr);
+        double cv = Double.parseDouble(cvStr);
+        double mermaEntera = Double.parseDouble(mermaStr); 
+        
+        double mermaDecimal = mermaEntera / 100.0;
+        CalculadoraCostos calculadora = new CalculadoraCostos();
+        double ccb = calculadora.calcularCCB(cf, cv, raciones, mermaDecimal);
+
+        Menu nuevoMenu = new Menu(fecha, tipoComida, tipoPlato, raciones, ccb);
+        guardarMenu(nuevoMenu);
+
+        return ccb; 
+    }
 }

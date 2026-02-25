@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import modelo.modelo;
-import modelo.CalculadoraCostos;
-import modelo.Menu;
 import modelo.ModeloMenuTXT;
 import vista.VistaMenuAdmin;
 
@@ -13,13 +11,11 @@ public class ControladorMenuAdmin implements ActionListener {
     private VistaMenuAdmin vista;
     private ModeloMenuTXT modelo;
     private modelo modeloLectura;
-    private CalculadoraCostos calculadora; 
 
     public ControladorMenuAdmin() {
         this.vista = new VistaMenuAdmin();
         this.modelo = new ModeloMenuTXT();
         this.modeloLectura = new modelo();
-        this.calculadora = new CalculadoraCostos(); 
         this.vista.setControlador(this);
         this.vista.setVisible(true);
     }
@@ -37,32 +33,23 @@ public class ControladorMenuAdmin implements ActionListener {
     }
 
     private void guardarMenuConCalculo() {
+        String fecha = vista.getFecha();
+        String tipoComida = vista.getTipoComida();
+        String tipo = vista.getTipoPlato();
+        String cantStr = vista.getCantidad();
+        String cfStr = vista.getCostoFijo();
+        String cvStr = vista.getCostoVariable();
+        String mermaStr = vista.getMerma();
+
+        if(fecha.isEmpty() || tipo.isEmpty() || cantStr.isEmpty() || cfStr.isEmpty()) {
+            JOptionPane.showMessageDialog(vista, "Por favor llene todos los campos.");
+            return;
+        }
+
         try {
-            String fecha = vista.getFecha();
-            String tipoComida = vista.getTipoComida();
-            String tipo = vista.getTipoPlato();
-            String cantStr = vista.getCantidad();
-            
-            String cfStr = vista.getCostoFijo();
-            String cvStr = vista.getCostoVariable();
-            String mermaStr = vista.getMerma();
+            double ccb = modelo.procesarYGuardarMenu(fecha, tipoComida, tipo, cantStr, cfStr, cvStr, mermaStr);
 
-            if(fecha.isEmpty() || tipo.isEmpty() || cantStr.isEmpty() || cfStr.isEmpty()) {
-                JOptionPane.showMessageDialog(vista, "Por favor llene todos los campos.");
-                return;
-            }
-
-            int raciones = Integer.parseInt(cantStr); 
-            double cf = Double.parseDouble(cfStr);
-            double cv = Double.parseDouble(cvStr);
-            double mermaEntera = Double.parseDouble(mermaStr); 
-            double mermaDecimal = mermaEntera / 100.0;
-            double ccb = calculadora.calcularCCB(cf, cv, raciones, mermaDecimal);
-
-            Menu nuevoMenu = new Menu(fecha,tipoComida, tipo, raciones, ccb);
-            modelo.guardarMenu(nuevoMenu);
-            
-            JOptionPane.showMessageDialog(vista, "Calculado y Guardado.\nCosto Bandeja (CCB): " + String.format("%.2f", ccb) + " Bs.");
+            JOptionPane.showMessageDialog(vista, "Guardado.\nCosto Bandeja (CCB): " + String.format("%.2f", ccb) + " Bs.");
             
             vista.limpiarCampos();
             mostrarMenus(); 
@@ -82,7 +69,7 @@ public class ControladorMenuAdmin implements ActionListener {
     }
 
     private void salirdelmenu() {
-            vista.dispose(); 
-            new ControladorDashboard();   
+        vista.dispose(); 
+        new ControladorDashboard();   
     }
 }
