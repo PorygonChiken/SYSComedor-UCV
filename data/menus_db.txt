@@ -1,4 +1,4 @@
-21/2/2026#Desayuno#Carakoles con queso#9#524.00
-21/2/2026#Desayuno#Carakoles con guijarros extra#9#524.00
-21/2/2026#Almuerzo#Arequipe con petroleo#7#82.00
-21/2/2026#Almuerzo#ABCS#10#888.00
+23/2/2026#Desayuno#Empanadas de carne mechada#9#670.00
+23/2/2026#Desayuno#Sandwich de jamon con queso#9#650.00
+23/2/2026#Almuerzo#Pasta con carne molida#7#1200.00
+23/2/2026#Almuerzo#Asado negro con puré#10#2200.00
