@@ -3,7 +3,7 @@ package modelo;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ModeloPrueba {
+public class ModeloTest {
     @Test
     public void testRegistrarUsuario() {
         modelo miModelo = new modelo();
