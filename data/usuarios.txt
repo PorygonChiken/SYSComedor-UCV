@@ -1,7 +1,4 @@
-Ernesto;11111111;111;8000
-Alejandro;33333333;333;4836.4;test2
-Sebastian;44444444;444;1
-Mauricio;55555555;555;5000
-Juan;22222222;222;621.4;test
-Judy Hopps;66666666;666;0;default.png
-AAA_TestUser;88888888;clave123;500.0;default.png
+Ernesto;11111111;111;8000;test1
+Juan;22222222;222;621.4;test2
+Alejandro;33333333;333;4836.4;abc
+Kevin;66666666;666;0;img_87362874_redmi

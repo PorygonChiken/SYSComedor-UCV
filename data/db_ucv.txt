@@ -1,6 +1,6 @@
-11111111;admin
-22222222;empleado;test
-33333333;estudiante
-44444444;estuDIante
-55555555;ADMIN
-66666666;profesor
+11111111;admin;test1
+22222222;empleado;test2
+33333333;estudiante;abc
+44444444;estudiante;au_65k
+55555555;admin;ab89cb3
+66666666;profesor;img_87362874_redmi
