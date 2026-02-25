@@ -274,7 +274,7 @@ public class modelo{
         return false;
     }
 
-public boolean registrarReserva(String usuario, String fecha, String tipoComida, String tipoPlato, double costo) {
+    public boolean registrarReserva(String usuario, String fecha, String tipoComida, String tipoPlato, double costo) {
         java.util.List<String> lineasMenu = new java.util.ArrayList<>();
         boolean menuActualizado = false;
         
