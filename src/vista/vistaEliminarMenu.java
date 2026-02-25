@@ -15,10 +15,11 @@ public class vistaEliminarMenu extends JFrame {
     private JPanel panelDesayunosContenido;
     private JPanel panelAlmuerzosContenido;   
     private java.util.List<JButton> botonesEliminar = new java.util.ArrayList<>();
+    private java.util.List<JButton> botonesEditar = new java.util.ArrayList<>();
     private ActionListener controladorActual;
 
     public vistaEliminarMenu() {
-        menuUtils.configurarFrame(this, "Gestión de Menús - Eliminar", 1000, 720, JFrame.EXIT_ON_CLOSE);
+        menuUtils.configurarFrame(this, "Gestión de Menús - Eliminar/Editar", 1000, 720, JFrame.EXIT_ON_CLOSE);
 
         JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
         JPanel contenedor = crearPanel();
@@ -126,6 +127,7 @@ public class vistaEliminarMenu extends JFrame {
         panelDesayunosContenido.removeAll();
         panelAlmuerzosContenido.removeAll();
         botonesEliminar.clear();
+        botonesEditar.clear();
         
         for (Menu m : menus) {
             JPanel card = crearTarjeta(m);
@@ -143,6 +145,19 @@ public class vistaEliminarMenu extends JFrame {
 
         if (controladorActual != null) {
             for (JButton btn : botonesEliminar) {
+                boolean hasListener = false;
+                for (ActionListener al : btn.getActionListeners()) {
+                    if (al == controladorActual) {
+                        hasListener = true;
+                        break;
+                    }
+                }
+                if (!hasListener) {
+                    btn.addActionListener(controladorActual);
+                }
+            }
+            
+            for (JButton btn : botonesEditar) {
                 boolean hasListener = false;
                 for (ActionListener al : btn.getActionListeners()) {
                     if (al == controladorActual) {
@@ -186,24 +201,39 @@ public class vistaEliminarMenu extends JFrame {
         lblPrecio.setFont(new Font("ARIAL", Font.PLAIN, 12));
         lblPrecio.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        JButton btnEditar = new JButton("Editar");
+        btnEditar.setFont(new Font("ARIAL", Font.BOLD, 11));
+        btnEditar.setBackground(new Color(23, 162, 184)); 
+        btnEditar.setForeground(Color.WHITE);
+        btnEditar.setFocusPainted(false);
+        btnEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEditar.putClientProperty("menu_data", m);
+        btnEditar.setActionCommand("editar_menu");
+        botonesEditar.add(btnEditar);
+
         JButton btnEliminar = new JButton("Eliminar");
         btnEliminar.setFont(new Font("ARIAL", Font.BOLD, 11));
         btnEliminar.setBackground(new Color(220, 53, 69)); 
         btnEliminar.setForeground(Color.WHITE);
         btnEliminar.setFocusPainted(false);
         btnEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnEliminar.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
         btnEliminar.putClientProperty("menu_data", m);
         btnEliminar.setActionCommand("eliminar_menu");
-
         botonesEliminar.add(btnEliminar);
+
+        JPanel panelBotones = new JPanel();
+        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS));
+        panelBotones.setOpaque(false);
+        panelBotones.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panelBotones.add(btnEditar);
+        panelBotones.add(Box.createRigidArea(new Dimension(10, 0)));
+        panelBotones.add(btnEliminar);
 
         card.add(txtPlato);
         card.add(Box.createRigidArea(new Dimension(0, 5)));
         card.add(lblPrecio);
         card.add(Box.createRigidArea(new Dimension(0, 10)));
-        card.add(btnEliminar);
+        card.add(panelBotones);
         
         return card;
     }
@@ -215,6 +245,10 @@ public class vistaEliminarMenu extends JFrame {
         btnVolver.setActionCommand("volver_dashboard");
         
         for (JButton btn : botonesEliminar) {
+            btn.addActionListener(ac);
+        }
+        
+        for (JButton btn : botonesEditar) {
             btn.addActionListener(ac);
         }
     }

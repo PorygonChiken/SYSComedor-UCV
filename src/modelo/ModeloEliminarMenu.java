@@ -34,7 +34,7 @@ public class ModeloEliminarMenu {
                         lineasValidas.add(linea);
                     }
                 } else {
-                    lineasValidas.add(linea);
+                        lineasValidas.add(linea);
                 }
             }
         } catch (Exception e) { return false; }
@@ -45,6 +45,40 @@ public class ModeloEliminarMenu {
             } catch (IOException e) { return false; }
         }
         return eliminado;
+    }
+
+    public boolean editarMenu(String fecha, String tipoComida, String tipoPlatoAntiguo, String nuevoPlato, int nuevasRaciones, double nuevoCosto) {
+        if (!archivoMenus.exists()) return false;
+        
+        List<String> lineasValidas = new ArrayList<>();
+        boolean modificado = false;
+
+        try (Scanner scanner = new Scanner(archivoMenus)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] datos = linea.split("#");
+                
+                if (datos.length >= 5 && datos[0].trim().equals(fecha.trim()) && 
+                    datos[1].trim().equalsIgnoreCase(tipoComida.trim()) && 
+                    datos[2].trim().equalsIgnoreCase(tipoPlatoAntiguo.trim())) {
+                    
+                    String platoFinal = (nuevoPlato != null && !nuevoPlato.isEmpty()) ? nuevoPlato : datos[2];
+                    int racionesFinales = (nuevasRaciones != -1) ? nuevasRaciones : Integer.parseInt(datos[3]);
+                    double costoFinal = (nuevoCosto != -1.0) ? nuevoCosto : Double.parseDouble(datos[4]);
+
+                    linea = datos[0] + "#" + datos[1] + "#" + platoFinal + "#" + racionesFinales + "#" + costoFinal;
+                    modificado = true; 
+                }
+                lineasValidas.add(linea);
+            }
+        } catch (Exception e) { return false; }
+
+        if (modificado) {
+            try (FileWriter writer = new FileWriter(archivoMenus, false)) {
+                for (String l : lineasValidas) writer.write(l + "\n");
+            } catch (IOException e) { return false; }
+        }
+        return modificado;
     }
 
     public void eliminarReservasPorMenu(String tipoComida, String tipoPlato) {
@@ -68,6 +102,37 @@ public class ModeloEliminarMenu {
                 } else {
                     lineasValidas.add(linea);
                 }
+            }
+        } catch (Exception e) { return; }
+
+        if (modificado) {
+            try (FileWriter writer = new FileWriter(archivoReservas, false)) {
+                for (String l : lineasValidas) writer.write(l + "\n");
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+
+    public void actualizarNombreReserva(String fecha, String tipoComida, String platoAntiguo, String nuevoPlato) {
+        if (!archivoReservas.exists()) return;
+
+        List<String> lineasValidas = new ArrayList<>();
+        boolean modificado = false;
+
+        try (Scanner scanner = new Scanner(archivoReservas)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                
+                if (partes.length >= 5) {
+                    if (partes[1].trim().equals(fecha.trim()) && 
+                        partes[2].trim().equalsIgnoreCase(tipoComida.trim()) && 
+                        partes[3].trim().equalsIgnoreCase(platoAntiguo.trim())) {
+                        
+                        linea = partes[0] + ";" + partes[1] + ";" + partes[2] + ";" + nuevoPlato + ";" + partes[4];
+                        modificado = true; 
+                    }
+                }
+                lineasValidas.add(linea);
             }
         } catch (Exception e) { return; }
 
@@ -115,6 +180,7 @@ public class ModeloEliminarMenu {
             } catch (IOException e) { e.printStackTrace(); }
         }
     }
+
     private void devolverRacionMenu(String tipoComida, String tipoPlato) {
         if (!archivoMenus.exists()) return;
         List<String> lineasMenu = new ArrayList<>();
