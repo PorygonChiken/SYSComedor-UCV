@@ -6,10 +6,9 @@ public class CalculadoraCostos {
         ESTUDIANTE, PROFESOR, EMPLEADO
     }
 
-   
-    private static final double TARIFA_ESTUDIANTE = 0.30; // 30%
-    private static final double TARIFA_PROFESOR = 0.90;   // 90%
-    private static final double TARIFA_EMPLEADO = 1.10;   // 110%
+    private static final double TARIFA_ESTUDIANTE = 0.30; 
+    private static final double TARIFA_PROFESOR = 0.90;   
+    private static final double TARIFA_EMPLEADO = 1.10;   
 
     public double calcularCCB(double cf, double cv, double nb, double mermaDecimal) {
         if (nb == 0) {
