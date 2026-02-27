@@ -1,4 +1,4 @@
-23/2/2026#Desayuno#Empanadas de carne mechada#9#670.00
-23/2/2026#Desayuno#Sandwich de jamon con queso#9#650.00
-23/2/2026#Almuerzo#Pasta con carne molida#7#1200.00
-23/2/2026#Almuerzo#Asado negro con puré#10#2200.00
+23/2/2026#Desayuno#Empanadas de carne mechada#7#670.00
+23/2/2026#Desayuno#Sandwich de jamon con queso#8#650.00
+23/2/2026#Almuerzo#Pasta con carne molida#5#1200.00
+23/2/2026#Almuerzo#Asado negro con puré#9#2200.00

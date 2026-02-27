@@ -245,8 +245,9 @@ public class controlador implements ActionListener{
             
             if (m != null) {
                 String fechaMenu = m.getFecha();
+                String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("d/M/yyyy"));
                 
-                if (this.modelo.reservaExiste(this.usuarioActual, fechaMenu, m.getTipoComida(), null)) {
+                if (this.modelo.reservaExiste(this.usuarioActual, fechaHoy, m.getTipoComida(), null)) {
                     JOptionPane.showMessageDialog(vistaMenu, 
                         "Ya has realizado una reserva para " + m.getTipoComida() + " en esta fecha.\nSolo se permite una reserva por comida al día.", 
                         "Límite de Reservas", 
@@ -269,7 +270,7 @@ public class controlador implements ActionListener{
                     );
                 
                     if (exito) {
-                        JOptionPane.showMessageDialog(vistaMenu, "Reserva realizada con éxito!");
+                        JOptionPane.showMessageDialog(vistaMenu, "Reserva realizada con exito");
                         m.setReservado(true);
                         btn.setEnabled(false);
                         btn.setBackground(java.awt.Color.GRAY);
