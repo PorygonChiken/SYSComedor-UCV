@@ -98,7 +98,7 @@ public class controlador implements ActionListener{
                 return;
             }
             if(rol.equals("admin")){
-                new ControladorDashboard();
+                new ControladorEliminarMenu(); 
                 vista.dispose();
             }else{
                 this.usuarioActual = usuario;
@@ -119,9 +119,17 @@ public class controlador implements ActionListener{
                         break;
                 }
 
+                double descuentoAdicional = this.modelo.obtenerDescuentoBeneficio(cedula);
+
                 if(tipoEnum != null) {
                     for(Menu m : menus){
                         double precioFinal = calc.calcularTarifa(m.getCostoUnitario(), tipoEnum);
+                        
+                        if (descuentoAdicional > 0) {
+                            precioFinal = precioFinal - (precioFinal * (descuentoAdicional / 100.0));
+                            precioFinal = Math.round(precioFinal * 100.0) / 100.0;
+                        }
+                        
                         m.setCostoUnitario(precioFinal);
                     }
                 }

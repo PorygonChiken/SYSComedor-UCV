@@ -10,7 +10,9 @@ import java.awt.event.ActionListener;
 
 public class vistaEliminarMenu extends JFrame {
     
-    public JButton btnVolver;
+    public JButton btnGestionarMenus;
+    public JButton btnCerrarSesion;
+    public JButton btnRegistrarBeneficio;
     private JLabel lblSaludo;
     private JPanel panelDesayunosContenido;
     private JPanel panelAlmuerzosContenido;   
@@ -19,7 +21,7 @@ public class vistaEliminarMenu extends JFrame {
     private ActionListener controladorActual;
 
     public vistaEliminarMenu() {
-        menuUtils.configurarFrame(this, "Gestión de Menús - Eliminar/Editar", 1000, 720, JFrame.EXIT_ON_CLOSE);
+        menuUtils.configurarFrame(this, "Gestión de Menús - Administrador", 1000, 720, JFrame.EXIT_ON_CLOSE);
 
         JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
         JPanel contenedor = crearPanel();
@@ -34,10 +36,18 @@ public class vistaEliminarMenu extends JFrame {
     }
     
     private JPanel crearPanel() {
-        JPanel contenedor = new JPanel(new BorderLayout(0, 20));
-        contenedor.setBackground(Color.WHITE);
+        JPanel contenedor = new JPanel(new BorderLayout(0, 20)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+                super.paintComponent(g);
+            }
+        };
+        contenedor.setOpaque(false);
+        contenedor.setBackground(menuUtils.BLANCO_TRANSLUCIDO);
         contenedor.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.BLACK, 2),
+            BorderFactory.createEmptyBorder(20, 20, 20, 20),
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
         contenedor.setPreferredSize(new Dimension(850, 500));
@@ -46,49 +56,56 @@ public class vistaEliminarMenu extends JFrame {
 
     private JPanel crearHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Color.WHITE);
+        header.setOpaque(false);
         
         lblSaludo = new JLabel("Administrador"); 
         lblSaludo.setFont(new Font("ARIAL", Font.BOLD, 26));
         header.add(lblSaludo, BorderLayout.WEST);
 
         JPanel headerButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        headerButtons.setBackground(Color.WHITE);
+        headerButtons.setOpaque(false);
 
-        btnVolver = new JButton("Volver");
-        btnVolver.setFont(new Font("ARIAL", Font.BOLD, 14));
-        btnVolver.setBackground(new Color(230, 230, 230));
-        btnVolver.setFocusPainted(false);
-        btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnRegistrarBeneficio = menuUtils.crearBoton("Registrar Beneficio");
+        btnRegistrarBeneficio.setFont(new Font("ARIAL", Font.BOLD, 14));
+        btnRegistrarBeneficio.setBackground(new Color(230, 230, 230)); 
 
-        headerButtons.add(btnVolver);
+        btnGestionarMenus = menuUtils.crearBoton("Gestionar Menús");
+        btnGestionarMenus.setFont(new Font("ARIAL", Font.BOLD, 14));
+        btnGestionarMenus.setBackground(new Color(230, 230, 230)); 
+
+        btnCerrarSesion = menuUtils.crearBoton("Cerrar Sesión");
+        btnCerrarSesion.setFont(new Font("ARIAL", Font.BOLD, 14));
+        btnCerrarSesion.setBackground(new Color(255, 100, 100)); 
+
+        headerButtons.add(btnRegistrarBeneficio);
+        headerButtons.add(btnGestionarMenus);
+        headerButtons.add(btnCerrarSesion);
         
         header.add(headerButtons, BorderLayout.EAST);
         return header;
     }
 
    private JPanel crearBody() {
-
         JPanel panelMenu = new JPanel(new GridLayout(1, 2, 20, 0));
-        panelMenu.setBackground(Color.WHITE);
+        panelMenu.setOpaque(false);
         
         panelDesayunosContenido = new JPanel();
         panelDesayunosContenido.setLayout(new BoxLayout(panelDesayunosContenido, BoxLayout.Y_AXIS));
-        panelDesayunosContenido.setBackground(Color.WHITE);
+        panelDesayunosContenido.setOpaque(false);
         
         panelAlmuerzosContenido = new JPanel();
         panelAlmuerzosContenido.setLayout(new BoxLayout(panelAlmuerzosContenido, BoxLayout.Y_AXIS));
-        panelAlmuerzosContenido.setBackground(Color.WHITE);
+        panelAlmuerzosContenido.setOpaque(false);
 
         panelMenu.add(crearMenu("Desayunos", panelDesayunosContenido));
         panelMenu.add(crearMenu("Almuerzos", panelAlmuerzosContenido));
 
         JPanel finalBody = new JPanel(new BorderLayout());
-        finalBody.setBackground(Color.WHITE);
+        finalBody.setOpaque(false);
         
         JPanel topSection = new JPanel();
         topSection.setLayout(new BoxLayout(topSection, BoxLayout.Y_AXIS));
-        topSection.setBackground(Color.WHITE);
+        topSection.setOpaque(false);
         
         JSeparator topLine = new JSeparator(SwingConstants.HORIZONTAL);
         topLine.setForeground(Color.BLACK);
@@ -104,7 +121,7 @@ public class vistaEliminarMenu extends JFrame {
 
     private JPanel crearMenu(String title, JPanel contentPanel) {
         JPanel col = new JPanel(new BorderLayout());
-        col.setBackground(Color.WHITE);
+        col.setOpaque(false);
 
         JLabel titulo = new JLabel(title);
         titulo.setFont(new Font("ARIAL", Font.BOLD, 18));
@@ -114,7 +131,8 @@ public class vistaEliminarMenu extends JFrame {
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
-        scroll.getViewport().setBackground(Color.WHITE);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
@@ -178,11 +196,19 @@ public class vistaEliminarMenu extends JFrame {
     }
     
     private JPanel crearTarjeta(Menu m) {
-        JPanel card = new JPanel();
+        JPanel card = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                super.paintComponent(g);
+            }
+        };
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBackground(new Color(245, 245, 245));
+        card.setBackground(new Color(255, 255, 255, 150));
+        card.setOpaque(false);
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         card.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -201,22 +227,18 @@ public class vistaEliminarMenu extends JFrame {
         lblPrecio.setFont(new Font("ARIAL", Font.PLAIN, 12));
         lblPrecio.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton btnEditar = new JButton("Editar");
+        JButton btnEditar = menuUtils.crearBoton("Editar");
         btnEditar.setFont(new Font("ARIAL", Font.BOLD, 11));
-        btnEditar.setBackground(new Color(23, 162, 184)); 
-        btnEditar.setForeground(Color.WHITE);
-        btnEditar.setFocusPainted(false);
-        btnEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEditar.setBackground(new Color(100, 200, 100)); 
+        btnEditar.setForeground(Color.WHITE); 
         btnEditar.putClientProperty("menu_data", m);
         btnEditar.setActionCommand("editar_menu");
         botonesEditar.add(btnEditar);
 
-        JButton btnEliminar = new JButton("Eliminar");
+        JButton btnEliminar = menuUtils.crearBoton("Eliminar");
         btnEliminar.setFont(new Font("ARIAL", Font.BOLD, 11));
-        btnEliminar.setBackground(new Color(220, 53, 69)); 
-        btnEliminar.setForeground(Color.WHITE);
-        btnEliminar.setFocusPainted(false);
-        btnEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEliminar.setBackground(new Color(255, 100, 100)); 
+        btnEliminar.setForeground(Color.BLACK); 
         btnEliminar.putClientProperty("menu_data", m);
         btnEliminar.setActionCommand("eliminar_menu");
         botonesEliminar.add(btnEliminar);
@@ -241,8 +263,14 @@ public class vistaEliminarMenu extends JFrame {
     public void setControlador(ActionListener ac) {
         this.controladorActual = ac;
         
-        btnVolver.addActionListener(ac);
-        btnVolver.setActionCommand("volver_dashboard");
+        btnGestionarMenus.addActionListener(ac);
+        btnGestionarMenus.setActionCommand("gestionar_menus");
+        
+        btnCerrarSesion.addActionListener(ac);
+        btnCerrarSesion.setActionCommand("cerrar_sesion");
+
+        btnRegistrarBeneficio.addActionListener(ac);
+        btnRegistrarBeneficio.setActionCommand("registrar_beneficio");
         
         for (JButton btn : botonesEliminar) {
             btn.addActionListener(ac);

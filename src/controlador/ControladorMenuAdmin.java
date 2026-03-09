@@ -70,6 +70,6 @@ public class ControladorMenuAdmin implements ActionListener {
 
     private void salirdelmenu() {
         vista.dispose(); 
-        new ControladorDashboard();   
+        new ControladorEliminarMenu();   
     }
 }

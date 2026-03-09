@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class modelo{
+    
     private static final String DATA_DIR = "data";
     private final File archivoUsuarios = new File(DATA_DIR, "usuarios.txt");
     private final File archivoDb = new File(DATA_DIR, "db_ucv.txt");
     private final File archivoMenus = new File(DATA_DIR, "menus_db.txt");
+    private final File archivoBeneficios = new File(DATA_DIR, "beneficios.txt");
 
     public modelo(){
     }
@@ -126,7 +128,6 @@ public class modelo{
                     }
                     if (!fechaMenu.isBefore(inicio) && !fechaMenu.isAfter(hoy)) {
                         menu.append("• [")
-                            //.append(fechaTexto).append(" - ")
                             .append(datos[1]).append("] ")
                             .append(datos[2])
                             .append(" ..........................")
@@ -261,9 +262,9 @@ public class modelo{
                     
                     if (usuarioMatch && fechaMatch && tipoComidaMatch) {
                         if (tipoPlato == null) {
-                            return true; // Existe reserva para este tipo de comida
+                            return true; 
                         } else if (partes[3].trim().equals(tipoPlato)) {
-                            return true; // Existe reserva para este plato específico
+                            return true; 
                         }
                     }
                 }
@@ -334,7 +335,7 @@ public class modelo{
         return reservas;
     }
 
-public String procesarAccesoFacial(String usuario) {
+    public String procesarAccesoFacial(String usuario) {
         File fReserva = new File(DATA_DIR, "reserva.txt");
         if (!fReserva.exists()) return "No tienes reservas activas.";
 
@@ -411,5 +412,75 @@ public String procesarAccesoFacial(String usuario) {
         }
     }
 
-   
+    public boolean existeUsuarioPorCedula(String cedulaABuscar) {
+        if (!archivoUsuarios.exists()) return false;
+        try (Scanner scanner = new Scanner(archivoUsuarios)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                if (linea.trim().isEmpty() || !linea.contains(";")) continue;
+                String[] partes = linea.split(";");
+                if (partes.length >= 2 && partes[1].trim().equals(cedulaABuscar.trim())) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer usuarios.txt: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean registrarBeneficio(String cedula, String tipo, double descuento) {
+        File directorio = new File(DATA_DIR);
+        if (!directorio.exists()) {
+            directorio.mkdirs();
+        }
+
+        List<String> lineasValidas = new ArrayList<>();
+        
+        // Leemos todo el archivo y filtramos la cédula si ya existe para reemplazarla
+        if (archivoBeneficios.exists()) {
+            try (Scanner scanner = new Scanner(archivoBeneficios)) {
+                while (scanner.hasNextLine()) {
+                    String linea = scanner.nextLine();
+                    if (linea.trim().isEmpty()) continue;
+                    String[] partes = linea.split(";");
+                    if (partes.length >= 3 && !partes[0].trim().equals(cedula.trim())) {
+                        lineasValidas.add(linea);
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Error al leer beneficios.txt: " + e.getMessage());
+                return false;
+            }
+        }
+
+        lineasValidas.add(cedula + ";" + tipo + ";" + descuento);
+
+        try (FileWriter fw = new FileWriter(archivoBeneficios, false)) {
+            for (String linea : lineasValidas) {
+                fw.write(linea + "\n");
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("Error al guardar el beneficio: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public double obtenerDescuentoBeneficio(String cedula) {
+        if (!archivoBeneficios.exists()) return 0.0;
+        try (Scanner scanner = new Scanner(archivoBeneficios)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                if (linea.trim().isEmpty()) continue;
+                String[] partes = linea.split(";");
+                if (partes.length >= 3 && partes[0].trim().equals(cedula.trim())) {
+                    return Double.parseDouble(partes[2].trim());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
 }

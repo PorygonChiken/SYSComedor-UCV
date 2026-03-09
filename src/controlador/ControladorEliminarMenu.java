@@ -31,8 +31,14 @@ public class ControladorEliminarMenu implements ActionListener {
         String comando = e.getActionCommand();
 
         switch (comando) {
-            case "volver_dashboard":
-                volverAlDashboard();
+            case "gestionar_menus":
+                abrirGestionarMenus();
+                break;
+            case "cerrar_sesion":
+                cerrarSesion();
+                break;
+            case "registrar_beneficio":
+                registrarBeneficioAccion();
                 break;
             case "eliminar_menu":
                 eliminarMenuAccion(e);
@@ -153,8 +159,65 @@ public class ControladorEliminarMenu implements ActionListener {
         }
     }
 
-    private void volverAlDashboard() {
+    private void abrirGestionarMenus() {
         this.vistaEliminar.dispose();
-        new ControladorDashboard(); 
+        new ControladorMenuAdmin(); 
+    }
+
+    private void cerrarSesion() {
+        this.vistaEliminar.dispose();
+        new controlador(); 
+    }
+
+    private void registrarBeneficioAccion() {
+        String ci = JOptionPane.showInputDialog(vistaEliminar, "Ingrese la Cédula del Estudiante:");
+        if (ci == null || ci.trim().isEmpty()) return;
+
+        if (!modelo.existeUsuarioPorCedula(ci)) {
+            JOptionPane.showMessageDialog(vistaEliminar, "La cédula ingresada no se encuentra registrada en el sistema de usuarios.", "Cédula no encontrada", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String rol = modelo.obtenerRol(ci);
+        if (rol == null || !rol.equalsIgnoreCase("estudiante")) {
+            JOptionPane.showMessageDialog(vistaEliminar, "Acción denegada. La cédula ingresada pertenece a un '" + (rol != null ? rol : "Desconocido") + "', no a un estudiante.", "Rol Inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String[] opciones = {"Estudiante Becario", "Estudiante Exonerado"};
+        int seleccion = JOptionPane.showOptionDialog(vistaEliminar, 
+            "Estudiante verificado.\nSeleccione el tipo de beneficio a otorgar:", 
+            "Asignar Beneficio",
+            JOptionPane.DEFAULT_OPTION, 
+            JOptionPane.QUESTION_MESSAGE, 
+            null, opciones, opciones[0]);
+
+        if (seleccion == -1) return; 
+
+        String tipoBeneficio = opciones[seleccion];
+        double descuentoAdicional = 0.0;
+
+        if (seleccion == 0) { 
+            String inputDesc = JOptionPane.showInputDialog(vistaEliminar, "Ingrese el porcentaje de descuento extra (Ej: 50 para 50%):");
+            if (inputDesc == null || inputDesc.trim().isEmpty()) return;
+            
+            try {
+                descuentoAdicional = Double.parseDouble(inputDesc);
+                if (descuentoAdicional < 0 || descuentoAdicional > 100) throw new NumberFormatException();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(vistaEliminar, "Porcentaje inválido. Debe ser un número entre 0 y 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else { 
+            descuentoAdicional = 100.0; 
+        }
+
+        boolean exito = modelo.registrarBeneficio(ci, tipoBeneficio, descuentoAdicional);
+        
+        if (exito) {
+            JOptionPane.showMessageDialog(vistaEliminar, "El beneficio de " + tipoBeneficio + " ha sido registrado exitosamente para la CI: " + ci, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(vistaEliminar, "Ocurrió un error al intentar guardar el beneficio.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
