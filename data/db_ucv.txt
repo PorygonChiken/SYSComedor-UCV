@@ -4,3 +4,4 @@
 44444444;estudiante;au_65k
 55555555;admin;ab89cb3
 66666666;profesor;img_87362874_redmi
+99999999;cajero

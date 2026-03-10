@@ -100,7 +100,11 @@ public class controlador implements ActionListener{
             if(rol.equals("admin")){
                 new ControladorEliminarMenu(); 
                 vista.dispose();
-            }else{
+            }else if (rol.equals("cajero")) {
+                new ControladorVerificacionFacialAdmin(); 
+                vista.dispose(); // Cierra la ventana de login
+                }
+                else{
                 this.usuarioActual = usuario;
                 vistaMenu.setUsuario(usuario + " (" + rol + ")");
                 List<Menu> menus = this.modelo.obtenerMenusDisponibles();

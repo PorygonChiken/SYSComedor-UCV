@@ -437,7 +437,6 @@ public class modelo{
 
         List<String> lineasValidas = new ArrayList<>();
         
-        // Leemos todo el archivo y filtramos la cédula si ya existe para reemplazarla
         if (archivoBeneficios.exists()) {
             try (Scanner scanner = new Scanner(archivoBeneficios)) {
                 while (scanner.hasNextLine()) {
