@@ -13,6 +13,7 @@ public class vistaMenuUsuario extends JFrame {
     public JButton btnSalir;
     public JButton btnReservas;
     public JButton btnRecargar;
+    public JButton btnSaldoPana;
     private JLabel lblSaludo;
     private JPanel panelDesayunosContenido;
     private JPanel panelAlmuerzosContenido;   
@@ -169,12 +170,19 @@ public class vistaMenuUsuario extends JFrame {
         btnRecargar.setFont(new Font("ARIAL", Font.BOLD, 14));
         btnRecargar.setBackground(new Color(230, 230, 230));
         btnRecargar.setMaximumSize(new Dimension(150, 40));
+
+        btnSaldoPana = menuUtils.crearBoton("Saldo Pana");
+        btnSaldoPana.setFont(new Font("ARIAL", Font.BOLD, 14));
+        btnSaldoPana.setBackground(new Color(255, 200, 100));
+        btnSaldoPana.setMaximumSize(new Dimension(150, 40));
         
         panelMonedero.add(tituloMonedero);
         panelMonedero.add(Box.createRigidArea(new Dimension(0, 100)));
         panelMonedero.add(lblTextoMonedero);
-        panelMonedero.add(Box.createRigidArea(new Dimension(0, 140)));
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 80)));
         panelMonedero.add(btnRecargar);
+        panelMonedero.add(Box.createRigidArea(new Dimension(0, 20)));
+        panelMonedero.add(btnSaldoPana);
         panelMonedero.add(Box.createVerticalGlue());
         
         JPanel monederoWrapper = new JPanel(new BorderLayout());
@@ -335,6 +343,27 @@ public class vistaMenuUsuario extends JFrame {
         }
     }
 
+    public String[] solicitarDatosSaldoPana() {
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        JTextField cedulaField = new JTextField();
+        JTextField montoField = new JTextField();
+
+        panel.add(new JLabel("Cédula del Pana a transferir:"));
+        panel.add(cedulaField);
+        panel.add(new JLabel("Monto a transferir (Bs):"));
+        panel.add(montoField);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, "Transferir Saldo Pana",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        if (result == JOptionPane.OK_OPTION) {
+            String cedulaStr = cedulaField.getText().trim();
+            String montoStr = montoField.getText().trim();
+            if (cedulaStr.isEmpty() || montoStr.isEmpty()) return null;
+            return new String[] {cedulaStr, montoStr};
+        }
+        return null;
+    }
 
     public void setMonedero(String saldo) {
         lblTextoMonedero.setText(saldo + " Bs");
@@ -346,6 +375,8 @@ public class vistaMenuUsuario extends JFrame {
         
         btnRecargar.addActionListener(ac);
         btnRecargar.setActionCommand("recargar");
+        btnSaldoPana.addActionListener(ac);
+        btnSaldoPana.setActionCommand("saldo_pana");
         btnReservas.addActionListener(ac);
         btnReservas.setActionCommand("ver_reservas");
         btnSalir.addActionListener(ac);

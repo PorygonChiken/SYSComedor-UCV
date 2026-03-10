@@ -16,7 +16,7 @@ public class VistaVerificacionFacialAdmin extends JFrame {
         menuUtils.configurarFrame(this, "Verificación Facial - Admin", 1000, 720, JFrame.EXIT_ON_CLOSE);
 
         JPanel panelPrincipal = menuUtils.crearPanelPrincipal();
-        JPanel contenidoPanel = menuUtils.crearPanelCaja(new Dimension(600, 550));
+        JPanel contenidoPanel = menuUtils.crearPanelCaja(new Dimension(600, 600));
 
         contenidoPanel.add(Box.createRigidArea(menuUtils.ESPACIO_20));
         contenidoPanel.add(menuUtils.crearTitulo("VERIFICACIÓN FACIAL"));
@@ -47,7 +47,7 @@ public class VistaVerificacionFacialAdmin extends JFrame {
 
         contenidoPanel.add(Box.createRigidArea(menuUtils.ESPACIO_30));
 
-        btnVolver = menuUtils.crearBoton("salir");
+        btnVolver = menuUtils.crearBoton("Salir");
         btnVolver.setMaximumSize(dimBoton);
         btnVolver.setBackground(new Color(255, 100, 100));
         btnVolver.setForeground(Color.WHITE);
