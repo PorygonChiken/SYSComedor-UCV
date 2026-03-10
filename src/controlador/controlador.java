@@ -63,6 +63,9 @@ public class controlador implements ActionListener{
             case "recargar":
                 recargarSaldo();
                 break;
+            case "saldo_pana": 
+                transferirPana();
+                break;
             case "reservar_menu":
                 reservarMenu(a);
                 break;
@@ -102,13 +105,24 @@ public class controlador implements ActionListener{
                 vista.dispose();
             }else if (rol.equals("cajero")) {
                 new ControladorVerificacionFacialAdmin(); 
-                vista.dispose(); // Cierra la ventana de login
+                vista.dispose(); 
                 }
                 else{
-                this.usuarioActual = usuario;
-                vistaMenu.setUsuario(usuario + " (" + rol + ")");
+                    this.usuarioActual = usuario;
+                
+                String rolMostrar = rol; 
+                if (rol.equals("estudiante")) {
+                    String subRol = this.modelo.obtenerSubRolEstudiante(cedula);
+                    if (subRol.equals("Exonerado")) {
+                        rolMostrar = "Estudiante exone.";
+                    } else if (subRol.equals("Becario")) {
+                        rolMostrar = "Estudiante becario";
+                    }
+                }
+                vistaMenu.setUsuario(usuario + " (" + rolMostrar + ")");
+               
                 List<Menu> menus = this.modelo.obtenerMenusDisponibles();
-        
+                
                 CalculadoraCostos calc = new CalculadoraCostos();
                 CalculadoraCostos.TipoUsuario tipoEnum = null;
                 switch(rol) {
@@ -292,6 +306,42 @@ public class controlador implements ActionListener{
                     }
                 }
             }
+        }
+    }
+
+    private void transferirPana() {
+        if (this.usuarioActual == null) return;
+
+        String[] datos = vistaMenu.solicitarDatosSaldoPana();
+        if (datos == null) return;
+
+        String cedulaDestino = datos[0];
+        String montoStr = datos[1];
+
+        if (!cedulaDestino.matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(vistaMenu, "La cédula debe contener solo números.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            double monto = Double.parseDouble(montoStr);
+            if (monto <= 0) {
+                JOptionPane.showMessageDialog(vistaMenu, "El monto debe ser mayor a 0.", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            boolean exito = this.modelo.transferirSaldoPana(this.usuarioActual, cedulaDestino, monto);
+            
+            if (exito) {
+                JOptionPane.showMessageDialog(vistaMenu, "Transferencia de " + monto + " Bs realizada con éxito.", "Saldo Pana", JOptionPane.INFORMATION_MESSAGE);
+                String nuevoSaldo = this.modelo.Saldo(this.usuarioActual);
+                vistaMenu.setMonedero(nuevoSaldo);
+            } else {
+                JOptionPane.showMessageDialog(vistaMenu, "Error en la transferencia.\nVerifique que tiene saldo suficiente y que la cédula destino existe (y no sea la suya).", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(vistaMenu, "Monto inválido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

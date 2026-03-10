@@ -567,4 +567,45 @@ public class modelo{
 
         return sb.toString();
     }
-}
+
+    public boolean transferirSaldoPana(String usuarioOrigen, String cedulaDestino, double monto) {
+        String miCedula = obtenerCedulaPorUsuario(usuarioOrigen);
+        if (miCedula != null && miCedula.equals(cedulaDestino)) {
+            return false; 
+        }
+        
+        if (!existeUsuarioPorCedula(cedulaDestino)) {
+            return false; 
+        }
+
+        double miSaldo = Double.parseDouble(Saldo(usuarioOrigen));
+        if (miSaldo < monto) {
+            return false;
+        }
+
+        String usuarioDestino = null;
+        try (Scanner scanner = new Scanner(archivoUsuarios)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                String[] partes = linea.split(";");
+                if (partes.length >= 2 && partes[1].equals(cedulaDestino)) {
+                    usuarioDestino = partes[0];
+                    break;
+                }
+            }
+        } catch (IOException e) { return false; }
+
+        if (usuarioDestino == null) return false;
+
+        boolean restarExito = recargarSaldo(usuarioOrigen, -monto);
+        if (restarExito) {
+            boolean sumarExito = recargarSaldo(usuarioDestino, monto);
+            if (!sumarExito) {
+                recargarSaldo(usuarioOrigen, monto);
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+}    
