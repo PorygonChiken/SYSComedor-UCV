@@ -556,6 +556,8 @@ public class modelo{
         }
 
         StringBuilder sb = new StringBuilder();
+        sb.append("Total general de comensales: ").append(total).append("\n");
+        sb.append("------------------------------------------\n");
         sb.append("  - Profesores: ").append(prof).append("\n");
         sb.append("  - Empleados: ").append(emp).append("\n");
         sb.append("  - Estudiantes (Total): ").append(estTotal).append("\n");
