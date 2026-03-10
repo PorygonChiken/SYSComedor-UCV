@@ -26,6 +26,9 @@ public class ControladorMenuAdmin implements ActionListener {
             case "GUARDAR":
                 guardarMenuConCalculo();
                 break;
+            case "MOSTRAR_LISTADO":            
+                mostrarListadoAsistencia();   
+                break;
             case "SALIR":
                 salirdelmenu();
                 break;
@@ -66,6 +69,10 @@ public class ControladorMenuAdmin implements ActionListener {
     private void mostrarMenus() {
         String listado = modeloLectura.Menu();
         vista.setAreaReporte(listado);
+    }
+    private void mostrarListadoAsistencia() {
+        String reporte = modeloLectura.generarReporteAsistencia();
+        vista.setAreaReporte(reporte); 
     }
 
     private void salirdelmenu() {

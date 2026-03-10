@@ -16,6 +16,7 @@ public class modelo{
     private final File archivoDb = new File(DATA_DIR, "db_ucv.txt");
     private final File archivoMenus = new File(DATA_DIR, "menus_db.txt");
     private final File archivoBeneficios = new File(DATA_DIR, "beneficios.txt");
+    private final File archivoAsistencia = new File(DATA_DIR, "asistencia.txt");
 
     public modelo(){
     }
@@ -219,7 +220,7 @@ public class modelo{
                     double nuevoSaldo = saldoActual + monto;
                     
                     StringBuilder sb = new StringBuilder();
-                    sb.append(datos[0]).append(";").append(datos[1]).append(";").append(datos[2]).append(";").append(String.format(java.util.Locale.US, "%.1f", nuevoSaldo));
+                    sb.append(datos[0]).append(";").append(datos[1]).append(";").append(datos[2]).append(";").append(String.format(java.util.Locale.US, "%.2f", nuevoSaldo));
                     
                     for (int i = 4; i < datos.length; i++) {
                         sb.append(";").append(datos[i]);
@@ -335,11 +336,13 @@ public class modelo{
         return reservas;
     }
 
-    public String procesarAccesoFacial(String usuario) {
+   public String procesarAccesoFacial(String usuario) {
         File fReserva = new File(DATA_DIR, "reserva.txt");
         if (!fReserva.exists()) return "No tienes reservas activas.";
 
         java.util.List<String> lineasRestantes = new java.util.ArrayList<>();
+        java.util.List<String[]> reservasCobradas = new java.util.ArrayList<>(); 
+        
         double costoTotal = 0;
         int reservasEncontradas = 0;
 
@@ -351,6 +354,7 @@ public class modelo{
                 if (partes.length >= 5 && partes[0].equals(usuario)) {
                     costoTotal += Double.parseDouble(partes[4]);
                     reservasEncontradas++;
+                    reservasCobradas.add(partes); 
                 } else {
                     lineasRestantes.add(linea); 
                 }
@@ -365,6 +369,10 @@ public class modelo{
         }
 
         recargarSaldo(usuario, -costoTotal);
+
+        for (String[] reserva : reservasCobradas) {
+            registrarAsistencia(reserva[1], reserva[2], usuario);
+        }
 
         try (FileWriter writer = new FileWriter(fReserva, false)) {
             for (String l : lineasRestantes) {
@@ -481,5 +489,82 @@ public class modelo{
             e.printStackTrace();
         }
         return 0.0;
+    }
+
+    public String obtenerSubRolEstudiante(String cedula) {
+        if (!archivoBeneficios.exists()) return "Regular"; 
+        try (Scanner scanner = new Scanner(archivoBeneficios)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                if (linea.trim().isEmpty()) continue;
+                String[] partes = linea.split(";");
+                if (partes.length >= 3 && partes[0].trim().equals(cedula.trim())) {
+                    String tipoBeneficio = partes[1].trim().toLowerCase();
+                    if (tipoBeneficio.contains("exonerado")) return "Exonerado";
+                    if (tipoBeneficio.contains("becario")) return "Becario";
+                }
+            }
+        } catch (Exception e) {}
+        return "Regular";
+    }
+
+    private void registrarAsistencia(String fecha, String tipoComida, String usuario) {
+        String cedula = obtenerCedulaPorUsuario(usuario);
+        String rol = obtenerRol(cedula);
+        if (rol == null) rol = "desconocido";
+        
+        String subRol = "N/A";
+        if (rol.equalsIgnoreCase("estudiante")) {
+            subRol = obtenerSubRolEstudiante(cedula);
+        }
+
+        try (FileWriter fw = new FileWriter(archivoAsistencia, true)) {
+            fw.write(fecha + ";" + tipoComida + ";" + usuario + ";" + rol + ";" + subRol + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public String generarReporteAsistencia() {
+        if (!archivoAsistencia.exists()) return "No hay registros de asistencia aún.";
+
+        int total = 0, prof = 0, emp = 0, estTotal = 0;
+        int estReg = 0, estBec = 0, estExo = 0;
+
+        try (Scanner scanner = new Scanner(archivoAsistencia)) {
+            while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+                if (linea.trim().isEmpty()) continue;
+                String[] partes = linea.split(";");
+                
+                if (partes.length >= 5) {
+                    total++;
+                    String rol = partes[3].toLowerCase();
+                    String subRol = partes[4].toLowerCase();
+
+                    if (rol.equals("profesor")) prof++;
+                    else if (rol.equals("empleado")) emp++;
+                    else if (rol.equals("estudiante")) {
+                        estTotal++;
+                        if (subRol.equals("regular")) estReg++;
+                        else if (subRol.equals("becario")) estBec++;
+                        else if (subRol.equals("exonerado")) estExo++;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return "Error al generar el reporte.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("  - Profesores: ").append(prof).append("\n");
+        sb.append("  - Empleados: ").append(emp).append("\n");
+        sb.append("  - Estudiantes (Total): ").append(estTotal).append("\n");
+        if(estTotal > 0) {
+            sb.append("      * Regulares: ").append(estReg).append("\n");
+            sb.append("      * Becarios: ").append(estBec).append("\n");
+            sb.append("      * Exonerados: ").append(estExo).append("\n");
+        }
+
+        return sb.toString();
     }
 }
