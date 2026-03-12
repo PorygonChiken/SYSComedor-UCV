@@ -1,0 +1,13 @@
+Ernesto;11111111;111;8000;test1
+Juan;22222222;222;27764.40;test2
+Alejandro;33333333;333;4836.40;abc
+Gustavo;44444444;444;67;
+Kevin;66666666;666;0;img_87362874_redmi
+cajero1;99999999;123;0;
+Pana1;11111111;clave123;700.00;test1
+PanaRecibe;22222222;clave123;0;test2
+Pana2;33333333;clave123;0;abc
+Pana1;11111111;clave123;350.00;test1
+PanaRecibe;22222222;clave123;0;test2
+AAA_TestUser;88888888;clave123;500.00;default.png
+Pana2;33333333;clave123;0;abc
